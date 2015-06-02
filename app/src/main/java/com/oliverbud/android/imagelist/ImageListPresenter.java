@@ -181,6 +181,7 @@ public class ImageListPresenter {
                 imageListView.displayError();
             }
         };
+        imageListView.displayLoading();
         service.search(1.0f, searchString, 8, 0, null, "medium", callback);
 
 
