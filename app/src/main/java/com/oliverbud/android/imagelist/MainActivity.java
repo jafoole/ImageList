@@ -112,13 +112,15 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
                 String searchParam = (String)menuItem.getTitle();
                 drawerLayout.closeDrawer(GravityCompat.START);
-                listPresenter.searchFor(searchParam);
+                if (!searchParam.equals(currentSearch)) {
+                    listPresenter.searchFor(searchParam);
+                    searchInput.setTitle(searchParam);
+                    currentSearch = searchParam;
 
+                }
                 MenuItem searchItem = menu.findItem(R.id.search);
                 searchItem.collapseActionView();
-                searchInput.setTitle(searchParam);
 
-                currentSearch = searchParam;
                 return false;
             }
         });
@@ -153,10 +155,21 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             MenuItem menuItem = this.menu.findItem(R.id.search);
             menuItem.collapseActionView();
             searchInput.setTitle(query);
-
-            navigation.getMenu().add(query);
+            if (!containsItem(query)) {
+                navigation.getMenu().add(query);
+            }
             currentSearch = query;
         }
+    }
+
+    public boolean containsItem(String query){
+
+        for (int i = 0; i < navigation.getMenu().size(); i ++){
+            if (navigation.getMenu().getItem(i).getTitle().toString().toLowerCase().equals(query.toLowerCase())){
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -165,8 +178,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         super.onResume();
         Log.d("itemListApp", "onResume Activity");
         if (listPresenter != null && listPresenter.imageListView == null) {
-            listPresenter.recouple(this);
-            listPresenter.onResume();
+            listPresenter.onResume(this);
         }
     }
 

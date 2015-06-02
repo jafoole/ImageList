@@ -46,18 +46,16 @@ public class ImageListPresenter {
         this.imageListView = null;
     }
 
-    public void recouple(ImageListView ilv){
+
+    public void onResume(ImageListView ilv){
+        Log.d("itemListApp", "onResume Presenter");
         if (this.imageListView == null) {
             this.imageListView = ilv;
-        }
-    }
 
-    public void onResume(){
-        Log.d("itemListApp", "onResume Presenter");
-
-        if (this.imageListView != null && list != null && !list.isEmpty()){
-            Log.d("itemListApp", "list not empty");
-            this.imageListView.setItems(list);
+            if (list != null && !list.isEmpty()) {
+                Log.d("itemListApp", "list not empty");
+                this.imageListView.setItems(list);
+            }
         }
     }
 
