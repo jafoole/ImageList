@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,33 +19,25 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import java.util.ArrayList;
+
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.greenrobot.event.EventBus;
 import icepick.Icepick;
 
 
-public class MainActivity extends AppCompatActivity implements ImageListView{
+public class MainActivity extends AppCompatActivity{
 
     @InjectView(R.id.searchInput)Toolbar searchInput;
-    @InjectView(R.id.imageList) ListView imageList;
-    @InjectView(R.id.spinner) ProgressBar spinner;
+    @InjectView(R.id.listPager) ViewPager listPager;
     @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @InjectView(R.id.navigation) NavigationView navigation;
 
 
-    ImageListPresenter listPresenter;
-    ImageListAdapter adapter;
+
+    MyPagerAdapter myPagerAdapter;
 
     String currentSearch = null;
 
@@ -60,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        spinner.setIndeterminate(true);
-        spinner.setVisibility(View.GONE);
 
         setSupportActionBar(searchInput);
 
@@ -72,39 +63,12 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         getSupportActionBar().setHomeButtonEnabled(true);
         abdt.syncState();
 
-        searchInput.setTitle("");
-
-        if (listPresenter == null) {
-            listPresenter = new ImageListPresenter(this);
-        }
-
-        if (savedInstanceState != null) {
-            listPresenter.list = savedInstanceState.getParcelableArrayList("listData");
-            listPresenter.page = savedInstanceState.getInt("page");
+        if (savedInstanceState != null){
             currentSearch = savedInstanceState.getString("currentSearchString");
+
         }
 
-        imageList.setOnScrollListener(this.scrollListener = new EndlessScrollListener() {
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-
-            }
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("itemListApp", "onLoadMore Activity");
-
-                listPresenter.loadMore(currentSearch);
-            }
-
-            @Override
-            public void onLoadFail() {
-                Log.d("itemListApp", "onLoadFail scrollListener");
-
-                setLoading(false);
-            }
-        });
 
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -113,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
                 String searchParam = (String)menuItem.getTitle();
                 drawerLayout.closeDrawer(GravityCompat.START);
                 if (!searchParam.equals(currentSearch)) {
-                    listPresenter.searchFor(searchParam);
+
+                    EventBus.getDefault().post(new searchMessage(searchParam));
                     searchInput.setTitle(searchParam);
                     currentSearch = searchParam;
 
@@ -125,8 +90,17 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             }
         });
 
+        initializePaging();
+
         handleIntent(getIntent());
 
+    }
+
+    public void initializePaging(){
+
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        listPager.setAdapter(myPagerAdapter);
+        listPager.setOffscreenPageLimit(2);
     }
 
     @Override
@@ -151,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.d("itemListApp", "handling intent: " + query);
 
-            listPresenter.searchFor(query);
+            EventBus.getDefault().post(new searchMessage(query));
+
             MenuItem menuItem = this.menu.findItem(R.id.search);
             menuItem.collapseActionView();
             searchInput.setTitle(query);
@@ -177,16 +152,15 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     protected void onResume() {
         super.onResume();
         Log.d("itemListApp", "onResume Activity");
-        if (listPresenter != null && listPresenter.imageListView == null) {
-            listPresenter.onResume(this);
+        if (currentSearch != null){
+            getSupportActionBar().setTitle(currentSearch);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         Log.d("itemListApp", "onSaveInstanceState Activity");
-        outState.putParcelableArrayList("listData", listPresenter.list);
-        outState.putInt("page", listPresenter.page);
+
         outState.putString("currentSearchString", currentSearch);
 
         super.onSaveInstanceState(outState);
@@ -197,44 +171,17 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     @Override
     protected void onStop() {
         super.onStop();
-        listPresenter.decouple();
-        imageList.setOnScrollListener(null);
-    }
-
-    @Override
-    public void setItems(ArrayList<ImageDataItem> listData) {
-        this.imageList.setVisibility(View.VISIBLE);
-        this.spinner.setVisibility(View.INVISIBLE);
-        if (adapter == null || adapter.getData() != listData) {
-            imageList.setAdapter(this.adapter = new ImageListAdapter(this, listData));
-        }
-        else{
-            imageList.setAdapter(this.adapter);
-        }
-    }
-
-    @Override
-    public void addItems(ArrayList<ImageDataItem> listData) {
-
-        this.adapter.notifyDataSetChanged();
-
-    }
-
-    @Override
-    public void displayLoading() {
-        Log.d("itemListApp", "displayLoading Activity");
-        imageList.setVisibility(View.INVISIBLE);
-        spinner.setVisibility(View.VISIBLE);
+//        EventBus.getDefault().unregister(this);
 
 
     }
 
     @Override
-    public void displayError() {
-        Log.d("itemListApp", "displayError Activity");
-        this.scrollListener.onLoadFail();
-    }
+    protected void onStart() {
+        super.onStart();
 
+//        EventBus.getDefault().register(this);
+    }
 
     Menu menu;
     @Override

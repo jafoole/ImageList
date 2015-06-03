@@ -69,10 +69,10 @@ public class ImageListAdapter extends ArrayAdapter<ImageDataItem>{
 
         holder.name.setText(getItem(position).name);
 
-
-        holder.image.setLayoutParams(new LinearLayout.LayoutParams(getItem(position).width, getItem(position).height));
-        Picasso.with(context).load(url).placeholder(new ColorDrawable(Color.TRANSPARENT)).into(holder.image);
-
+        if (url != null) {
+            holder.image.setLayoutParams(new LinearLayout.LayoutParams(getItem(position).width, getItem(position).height));
+            Picasso.with(context).load(url).placeholder(new ColorDrawable(Color.TRANSPARENT)).into(holder.image);
+        }
         return rowView;
     }
 }

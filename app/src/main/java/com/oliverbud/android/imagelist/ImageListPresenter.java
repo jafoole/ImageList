@@ -32,7 +32,7 @@ public class ImageListPresenter {
 
     ArrayList<ImageDataItem> list;
 
-
+    @javax.inject.Inject
     public ImageListPresenter(ImageListView imageListView) {
         Log.d("itemListApp", "instantiate Presenter");
         this.imageListView = imageListView;
@@ -107,10 +107,12 @@ public class ImageListPresenter {
                         Log.d("itemListApp", "esception: " + e);
                     }
                 }
-                list.addAll(moreList);
+                if (list != null && imageListView != null) {
+                    list.addAll(moreList);
 
-                imageListView.addItems(moreList);
-                page += 1;
+                    imageListView.addItems(moreList);
+                    page += 1;
+                }
             }
 
             @Override
