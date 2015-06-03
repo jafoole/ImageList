@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -34,14 +36,15 @@ public class MainActivity extends AppCompatActivity{
     @InjectView(R.id.listPager) ViewPager listPager;
     @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @InjectView(R.id.navigation) NavigationView navigation;
+    @InjectView(R.id.tabLayout) TabLayout tabLayout;
 
 
 
     MyPagerAdapter myPagerAdapter;
 
     String currentSearch = null;
+    ArrayList<String> searchStrings;
 
-    EndlessScrollListener scrollListener;
     ActionBarDrawerToggle abdt;
 
     @Override
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
 
         setSupportActionBar(searchInput);
 
-
+        searchStrings = new ArrayList<String>();
         abdt = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
         drawerLayout.setDrawerListener(abdt);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -65,7 +68,10 @@ public class MainActivity extends AppCompatActivity{
 
         if (savedInstanceState != null){
             currentSearch = savedInstanceState.getString("currentSearchString");
-
+            searchStrings = savedInstanceState.getStringArrayList("searchStrings");
+            for (String searchString : searchStrings) {
+                navigation.getMenu().add(searchString);
+            }
         }
 
 
@@ -81,7 +87,9 @@ public class MainActivity extends AppCompatActivity{
                     EventBus.getDefault().post(new searchMessage(searchParam));
                     searchInput.setTitle(searchParam);
                     currentSearch = searchParam;
-
+                    if (!searchStrings.contains(currentSearch)) {
+                        searchStrings.add(currentSearch);
+                    }
                 }
                 MenuItem searchItem = menu.findItem(R.id.search);
                 searchItem.collapseActionView();
@@ -101,6 +109,7 @@ public class MainActivity extends AppCompatActivity{
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         listPager.setAdapter(myPagerAdapter);
         listPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(listPager);
     }
 
     @Override
@@ -134,6 +143,9 @@ public class MainActivity extends AppCompatActivity{
                 navigation.getMenu().add(query);
             }
             currentSearch = query;
+            if (!searchStrings.contains(currentSearch)) {
+                searchStrings.add(currentSearch);
+            }
         }
     }
 
@@ -162,7 +174,7 @@ public class MainActivity extends AppCompatActivity{
         Log.d("itemListApp", "onSaveInstanceState Activity");
 
         outState.putString("currentSearchString", currentSearch);
-
+        outState.putStringArrayList("searchStrings", searchStrings);
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
 

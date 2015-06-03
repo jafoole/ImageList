@@ -105,6 +105,8 @@ public class ImageListPresenter {
                     }
                     catch (Exception e){
                         Log.d("itemListApp", "esception: " + e);
+                        imageListView.displayError();
+
                     }
                 }
                 if (list != null && imageListView != null) {

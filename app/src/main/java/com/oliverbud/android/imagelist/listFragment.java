@@ -41,6 +41,8 @@ public class listFragment extends Fragment implements ImageListView{
     @Arg
     ArrayList<ImageDataItem> dataList;
 
+    EndlessScrollListener scrollListener;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,27 @@ public class listFragment extends Fragment implements ImageListView{
         View view = inflater.inflate(R.layout.list_fragment, container, false);
         ButterKnife.inject(this, view);
 
+        this.scrollListener = new EndlessScrollListener() {
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+
+            }
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d("itemListApp", "onLoadMore Activity");
+
+                listPresenter.loadMore(title);
+            }
+
+            @Override
+            public void onLoadFail() {
+                Log.d("itemListApp", "onLoadFail scrollListener");
+
+                setLoading(false);
+            }
+        };
         imageList.setOnScrollListener(scrollListener);
 
         if (dataList != null && !dataList.isEmpty()) {
@@ -151,27 +173,7 @@ public class listFragment extends Fragment implements ImageListView{
         this.scrollListener.onLoadFail();
     }
 
-    EndlessScrollListener scrollListener = new EndlessScrollListener() {
 
-        @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-
-        }
-        @Override
-        public void onLoadMore(int page, int totalItemsCount) {
-            Log.d("itemListApp", "onLoadMore Activity");
-
-            listPresenter.loadMore(title);
-        }
-
-        @Override
-        public void onLoadFail() {
-            Log.d("itemListApp", "onLoadFail scrollListener");
-
-            setLoading(false);
-        }
-    };
 
 
 }

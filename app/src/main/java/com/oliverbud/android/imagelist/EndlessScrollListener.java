@@ -21,15 +21,15 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     public EndlessScrollListener() {
     }
 
-    public EndlessScrollListener(int visibleThreshold) {
-        this.visibleThreshold = visibleThreshold;
-    }
-
-    public EndlessScrollListener(int visibleThreshold, int startPage) {
-        this.visibleThreshold = visibleThreshold;
-        this.startingPageIndex = startPage;
-        this.currentPage = startPage;
-    }
+//    public EndlessScrollListener(int visibleThreshold) {
+//        this.visibleThreshold = visibleThreshold;
+//    }
+//
+//    public EndlessScrollListener(int visibleThreshold, int startPage) {
+//        this.visibleThreshold = visibleThreshold;
+//        this.startingPageIndex = startPage;
+//        this.currentPage = startPage;
+//    }
 
     // This happens many times a second during a scroll, so be wary of the code you place here.
     // We are given a few useful parameters to help us work out if we need to load some more data,
@@ -37,7 +37,6 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     @Override
     public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount)
     {
-        Log.d("itemListApp", "onScroll Activity");
 
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
