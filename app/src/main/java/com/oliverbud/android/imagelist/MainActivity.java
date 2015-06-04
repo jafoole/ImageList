@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
                     //EventBus.getDefault().post(new searchMessage(searchParam));
                     presenter.searchFor(searchParam);
 
+                    EventBus.getDefault().post(new GenericEvent("SNACKS"));
+
+
                     searchInput.setTitle(searchParam);
                     currentSearch = searchParam;
                     if (!searchStrings.contains(currentSearch)) {
@@ -226,16 +229,19 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     }
 
     public void onEvent(GenericEvent event) {
-        View.OnClickListener myOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        };
-        Snackbar
-                .make(coordinatorLayout, "HULLO", Snackbar.LENGTH_LONG)
-                .setAction("CLICK", myOnClickListener)
-                .show();
+        if (event.event != "SNACKS") {
+            View.OnClickListener myOnClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+            };
+
+            Snackbar
+                    .make(coordinatorLayout, "HULLO", Snackbar.LENGTH_LONG)
+                    .setAction("CLICK", myOnClickListener)
+                    .show();
+        }
     }
 
     Menu menu;
