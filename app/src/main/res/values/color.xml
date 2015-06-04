@@ -4,4 +4,12 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
 
+    <color name="colorPrimaryDark">#5C1F99</color>
+    <color name="colorPrimary">#A347FF</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="navigationBarColor">#2E0F4C</color>
+
+
+
+
 </resources>

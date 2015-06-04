@@ -105,23 +105,30 @@ public class ImageListPresenter {
                     }
                     catch (Exception e){
                         Log.d("itemListApp", "esception: " + e);
+                        Log.d("itemListApp", "displayError 1");
+
                         imageListView.displayError();
 
                     }
                 }
-                if (list != null && imageListView != null) {
-                    list.addAll(moreList);
+                list.addAll(moreList);
 
-                    imageListView.addItems(moreList);
-                    page += 1;
-                }
+                imageListView.addItems(moreList);
+                page += 1;
+                Log.d("itemListApp", "increment page");
+
             }
 
             @Override
             public void failure(RetrofitError error) {
+                Log.d("itemListApp", "displayError 2");
+
                 imageListView.displayError();
             }
         };
+
+        Log.d("itemListApp", "page: " + page);
+
         service.search(1.0f, moreString, 8, page * 8, null, "small|medium", callback);
     }
 
@@ -181,6 +188,8 @@ public class ImageListPresenter {
             @Override
             public void failure(RetrofitError error) {
                 imageListView.displayError();
+                Log.d("itemListApp", "displayError 3");
+
             }
         };
         imageListView.displayLoading();

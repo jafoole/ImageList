@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId "com.oliverbud.android.imagelist"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"

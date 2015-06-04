@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         getSupportActionBar().setHomeButtonEnabled(true);
         abdt.syncState();
 
+
+
         if (savedInstanceState != null){
             currentSearch = savedInstanceState.getString("currentSearchString");
             searchStrings = savedInstanceState.getStringArrayList("searchStrings");
@@ -95,7 +97,9 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
                 String searchParam = (String)menuItem.getTitle();
                 drawerLayout.closeDrawer(GravityCompat.START);
                 if (!searchParam.equals(currentSearch)) {
-
+                    for (int i = 0; i < 3; i ++){
+                        myPagerAdapter.setLoadTrue(i);
+                    }
                     //EventBus.getDefault().post(new searchMessage(searchParam));
                     presenter.searchFor(searchParam);
 
@@ -149,6 +153,10 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             Log.d("itemListApp", "handling intent: " + query);
 
             //EventBus.getDefault().post(new searchMessage(query));
+
+            for (int i = 0; i < 3; i ++){
+                myPagerAdapter.setLoadTrue(i);
+            }
             presenter.searchFor(query);
 
             MenuItem menuItem = this.menu.findItem(R.id.search);
@@ -254,6 +262,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     public void setItems(ArrayList<ImageDataItem> listData) {
 
         for (int i = 0; i < 3; i ++){
+
+
             myPagerAdapter.setListAdapterForPosition(new ImageListAdapter(listData), i);
         }
 
@@ -277,6 +287,9 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
     @Override
     public void displayError() {
+        for (int i = 0; i < 3; i ++) {
+            myPagerAdapter.setLoadFalse(i);
+        }
         Log.d("itemListApp", "displayError Activity");
     }
 
@@ -297,6 +310,14 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
                 listViewAdapters[i].notifyDataSetChanged();
 
             }
+        }
+
+        public void setLoadFalse(int i){
+            listViews[i].getScrollListener().stopLoading();
+        }
+
+        public void setLoadTrue(int i){
+            listViews[i].getScrollListener().tryLoading();
         }
 
         @Override
@@ -328,16 +349,11 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             smartListView lv = new smartListView(MainActivity.this);
 
             listViews[position] = lv;
-            lv.setScrollListener(new EndlessScrollListener() {
-                @Override
-                public void onLoadMore(int page, int totalItemsCount) {
-                    presenter.loadMore(currentSearch);
 
-                }
-
+            lv.setScrollListener(new EndlessScrollListener(lv.getLayoutManager()) {
                 @Override
-                public void onLoadFail() {
-                    setLoading(false);
+                public void onLoadMore(int current_page) {
+                    MainActivity.this.presenter.loadMore(currentSearch);
 
                 }
             });

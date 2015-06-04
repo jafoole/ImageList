@@ -17,6 +17,10 @@ public class smartListView extends LinearLayout {
 
     RecyclerView lv;
 
+    LinearLayoutManager layoutManager;
+
+    EndlessScrollListener scrollListener;
+
     public smartListView(Context context){
         super(context);
 
@@ -25,7 +29,9 @@ public class smartListView extends LinearLayout {
 
         lv = (RecyclerView)view.findViewById(R.id.imageList);
 
-        lv.setLayoutManager(new LinearLayoutManager(context));
+        layoutManager = new LinearLayoutManager(context);
+
+        lv.setLayoutManager(layoutManager);
 
 
 
@@ -34,15 +40,25 @@ public class smartListView extends LinearLayout {
 
     }
 
+    public LinearLayoutManager getLayoutManager(){
+        return layoutManager;
+    }
+
+    public EndlessScrollListener getScrollListener() {
+        return scrollListener;
+    }
+
     public void setAdapter(RecyclerView.Adapter adapter){
         lv.setAdapter(adapter);
     }
 
-    public void setScrollListener(AbsListView.OnScrollListener scrollListener){
-
-//        lv.setOnScrollListener(scrollListener);
+    public void setScrollListener(RecyclerView.OnScrollListener scrollListener){
+        this.scrollListener = (EndlessScrollListener)scrollListener;
+        lv.setOnScrollListener(scrollListener);
 
     }
+
+
 
 
 
