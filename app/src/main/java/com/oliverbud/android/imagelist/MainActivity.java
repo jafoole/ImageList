@@ -204,9 +204,9 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         if (currentSearch != null){
             getSupportActionBar().setTitle(currentSearch);
         }
-        if (presenter != null){
-            presenter.onResume(this);
-        }
+//        if (presenter != null){
+//            presenter.onResume(this);
+//        }
     }
 
     @Override
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        presenter.decouple();
+//        presenter.decouple();
 
     }
 

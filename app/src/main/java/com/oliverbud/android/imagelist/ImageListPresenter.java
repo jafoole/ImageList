@@ -48,20 +48,20 @@ public class ImageListPresenter {
     }
 
     public void decouple(){
-        this.imageListView = null;
+//        this.imageListView = null;
     }
 
 
     public void onResume(ImageListView ilv){
-        Log.d("itemListApp", "onResume Presenter");
-        if (this.imageListView == null) {
-            this.imageListView = ilv;
-
-            if (list != null && !list.isEmpty()) {
-                Log.d("itemListApp", "list not empty");
-                this.imageListView.setItems(list);
-            }
-        }
+//        Log.d("itemListApp", "onResume Presenter");
+//        if (this.imageListView == null) {
+//            this.imageListView = ilv;
+//
+//            if (list != null && !list.isEmpty()) {
+//                Log.d("itemListApp", "list not empty");
+//                this.imageListView.setItems(list);
+//            }
+//        }
     }
 
     public void loadMore(String moreString){
