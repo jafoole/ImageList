@@ -49,8 +49,8 @@ public class smartListView extends LinearLayout {
 
     @Override
     protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
         bus.register(this);
+        super.onAttachedToWindow();
     }
 
     @Override

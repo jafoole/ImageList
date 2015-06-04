@@ -14,6 +14,9 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import dagger.ObjectGraph;
 import icepick.Icepick;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -26,20 +29,22 @@ import retrofit.client.Response;
 public class ImageListPresenter {
 
     ImageListView imageListView;
-    private ImageApi service;
+
+    ImageApi service;
 
     public int page = 0;
 
     ArrayList<ImageDataItem> list;
 
+    private ObjectGraph activityGraph;
+
+
     @javax.inject.Inject
-    public ImageListPresenter(ImageListView imageListView) {
+    public ImageListPresenter(ImageListView imageListView, ImageApi service) {
         Log.d("itemListApp", "instantiate Presenter");
         this.imageListView = imageListView;
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("https://ajax.googleapis.com")
-                .build();
-        this.service = restAdapter.create(ImageApi.class);
+        this.service = service;
+
     }
 
     public void decouple(){
@@ -113,10 +118,11 @@ public class ImageListPresenter {
 
                     }
                 }
-                list.addAll(moreList);
+                if (list != null && imageListView != null) {
+                    list.addAll(moreList);
 
-                imageListView.addItems(moreList);
-                Log.d("itemListApp", "increment page");
+                    imageListView.addItems(moreList);
+                }
 
             }
 

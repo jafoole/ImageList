@@ -32,8 +32,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
 
@@ -54,7 +57,10 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
     ActionBarDrawerToggle abdt;
 
+    @Inject
     ImageListPresenter presenter;
+
+    private ObjectGraph activityGraph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +71,12 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        if (presenter == null) {
-            presenter = new ImageListPresenter(this);
-        }
+//        if (presenter == null) {
+//            presenter = new ImageListPresenter(this);
+//        }
+
+        activityGraph = ((App) this.getApplication()).createScopedGraph(new PresenterModule(MainActivity.this));
+        activityGraph.inject(this);
 
         setSupportActionBar(searchInput);
 
