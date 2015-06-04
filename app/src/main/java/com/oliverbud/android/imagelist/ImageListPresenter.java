@@ -99,7 +99,9 @@ public class ImageListPresenter {
                                 newDataItem.setName(name);
                             }
 
-                            moreList.add(newDataItem);
+                            if (!list.contains(newDataItem)) {
+                                moreList.add(newDataItem);
+                            }
                         }
 
                     }

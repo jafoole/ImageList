@@ -19,6 +19,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by oliverbud on 5/26/15.
  */
@@ -37,6 +39,13 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             image = (ImageView)view.findViewById(R.id.imageView);
             name = (TextView)view.findViewById(R.id.textView);
             layout = (FrameLayout)view.findViewById(R.id.layout);
+
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EventBus.getDefault().post(new GenericEvent("Hello everyone!"));
+                }
+            });
 
         }
     }

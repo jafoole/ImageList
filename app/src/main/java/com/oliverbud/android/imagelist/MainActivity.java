@@ -4,11 +4,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
@@ -42,8 +45,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @InjectView(R.id.navigation) NavigationView navigation;
     @InjectView(R.id.tabLayout) TabLayout tabLayout;
-
-
+    @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
 
     listPagerAdapter myPagerAdapter;
 
@@ -211,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     @Override
     protected void onStop() {
         super.onStop();
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
         presenter.decouple();
 
     }
@@ -220,7 +222,20 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     protected void onStart() {
         super.onStart();
 
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
+    }
+
+    public void onEvent(GenericEvent event) {
+        View.OnClickListener myOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        };
+        Snackbar
+                .make(coordinatorLayout, "HULLO", Snackbar.LENGTH_LONG)
+                .setAction("CLICK", myOnClickListener)
+                .show();
     }
 
     Menu menu;
@@ -361,6 +376,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             if (presenter.list != null){
                 lv.setAdapter(new ImageListAdapter(presenter.list));
             }
+
 
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             container.addView(lv, layoutParams);
