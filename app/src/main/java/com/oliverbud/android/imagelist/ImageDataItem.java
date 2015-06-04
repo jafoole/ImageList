@@ -13,6 +13,7 @@ public class ImageDataItem implements Parcelable{
     Integer width;
     Integer height;
     String name;
+    int color;
 
     public void setUrl(String url){
         this.url = url;
@@ -28,6 +29,10 @@ public class ImageDataItem implements Parcelable{
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public void setColor(int color){
+        this.color = color;
     }
 
 

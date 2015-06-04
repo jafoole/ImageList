@@ -1,6 +1,7 @@
 package com.oliverbud.android.imagelist;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,6 +14,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -104,6 +106,11 @@ public class ImageListPresenter {
                                 newDataItem.setName(name);
                             }
 
+                            Random rnd = new Random();
+                            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
+                            newDataItem.setColor(color);
+
                             if (!list.contains(newDataItem)) {
                                 moreList.add(newDataItem);
                             }
@@ -179,6 +186,12 @@ public class ImageListPresenter {
                                 String name = (String)dataItem.get("imageId");
                                 newDataItem.setName(name);
                             }
+
+                            Random rnd = new Random();
+                            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
+                            newDataItem.setColor(color);
+
                             list.add(newDataItem);
                         }
 

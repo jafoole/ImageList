@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import de.greenrobot.event.EventBus;
 
@@ -64,7 +65,8 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
 
         if (url != null) {
             viewHolder.image.setLayoutParams(new LinearLayout.LayoutParams(dataItems.get(i).width, dataItems.get(i).height));
-            Picasso.with(App.getAppContext()).load(url).placeholder(new ColorDrawable(Color.TRANSPARENT)).into(viewHolder.image);
+
+            Picasso.with(App.getAppContext()).load(url).placeholder(new ColorDrawable(dataItems.get(i).color)).into(viewHolder.image);
         }
     }
 
