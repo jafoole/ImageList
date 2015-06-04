@@ -30,7 +30,7 @@ public class ImageListPresenter {
 
     ImageListView imageListView;
 
-    ImageApi service;
+    NetworkManager networkManager;
 
     public int page = 0;
 
@@ -40,10 +40,10 @@ public class ImageListPresenter {
 
 
     @javax.inject.Inject
-    public ImageListPresenter(ImageListView imageListView, ImageApi service) {
+    public ImageListPresenter(ImageListView imageListView, NetworkManager networkManager) {
         Log.d("itemListApp", "instantiate Presenter");
         this.imageListView = imageListView;
-        this.service = service;
+        this.networkManager = networkManager;
 
     }
 
@@ -136,7 +136,7 @@ public class ImageListPresenter {
 
         Log.d("itemListApp", "page: " + page);
         page += 1;
-        service.search(1.0f, moreString, 8, page * 8, null, "small|medium", callback);
+        networkManager.search(moreString, 8, page * 8, null, "medium", callback);
     }
 
     public void searchFor(String searchString) {
@@ -200,7 +200,7 @@ public class ImageListPresenter {
             }
         };
         imageListView.displayLoading();
-        service.search(1.0f, searchString, 8, 0, null, "medium", callback);
+        networkManager.search(searchString, 8, 0, null, "medium", callback);
 
 
     }

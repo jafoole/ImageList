@@ -29,15 +29,13 @@ public class PresenterModule {
         return ilv;
     }
 
-    @Provides @Singleton public ImageApi provideApiService() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("https://ajax.googleapis.com")
-                .build();
-        return restAdapter.create(ImageApi.class);
+    @Provides @Singleton public NetworkManager provideNetworkManager() {
+
+        return new NetworkManager();
     }
 
     @Provides
-    public ImageListPresenter provideImageListPresenter(ImageListView ilv, ImageApi service){
+    public ImageListPresenter provideImageListPresenter(ImageListView ilv, NetworkManager service){
         return new ImageListPresenter(ilv, service);
 
     }

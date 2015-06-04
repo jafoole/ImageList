@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     @InjectView(R.id.navigation) NavigationView navigation;
     @InjectView(R.id.tabLayout) TabLayout tabLayout;
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
+    @InjectView(R.id.spinner)ProgressBar spinner;
+
 
     listPagerAdapter myPagerAdapter;
 
@@ -71,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+        spinner.setIndeterminate(true);
+        spinner.setVisibility(View.GONE);
 //        if (presenter == null) {
 //            presenter = new ImageListPresenter(this);
 //        }
@@ -290,7 +295,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
     @Override
     public void setItems(ArrayList<ImageDataItem> listData) {
-
+        listPager.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.GONE);
         for (int i = 0; i < 3; i ++){
 
 
@@ -311,7 +317,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     @Override
     public void displayLoading() {
         Log.d("itemListApp", "displayLoading Activity");
-
+        listPager.setVisibility(View.GONE);
+        spinner.setVisibility(View.VISIBLE);
 
     }
 
