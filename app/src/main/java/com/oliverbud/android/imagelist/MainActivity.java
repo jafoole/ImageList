@@ -1,5 +1,6 @@
 package com.oliverbud.android.imagelist;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +22,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 
 
 import java.util.ArrayList;
@@ -30,7 +35,7 @@ import de.greenrobot.event.EventBus;
 import icepick.Icepick;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements ImageListView{
 
     @InjectView(R.id.searchInput)Toolbar searchInput;
     @InjectView(R.id.listPager) ViewPager listPager;
@@ -40,12 +45,14 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-    MyPagerAdapter myPagerAdapter;
+    listPagerAdapter myPagerAdapter;
 
     String currentSearch = null;
     ArrayList<String> searchStrings;
 
     ActionBarDrawerToggle abdt;
+
+    ImageListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,9 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+        if (presenter == null) {
+            presenter = new ImageListPresenter(this);
+        }
 
         setSupportActionBar(searchInput);
 
@@ -69,6 +79,8 @@ public class MainActivity extends AppCompatActivity{
         if (savedInstanceState != null){
             currentSearch = savedInstanceState.getString("currentSearchString");
             searchStrings = savedInstanceState.getStringArrayList("searchStrings");
+            presenter.list = savedInstanceState.getParcelableArrayList("presenterList");
+            presenter.page = savedInstanceState.getInt("page");
             for (String searchString : searchStrings) {
                 navigation.getMenu().add(searchString);
             }
@@ -84,7 +96,9 @@ public class MainActivity extends AppCompatActivity{
                 drawerLayout.closeDrawer(GravityCompat.START);
                 if (!searchParam.equals(currentSearch)) {
 
-                    EventBus.getDefault().post(new searchMessage(searchParam));
+                    //EventBus.getDefault().post(new searchMessage(searchParam));
+                    presenter.searchFor(searchParam);
+
                     searchInput.setTitle(searchParam);
                     currentSearch = searchParam;
                     if (!searchStrings.contains(currentSearch)) {
@@ -106,7 +120,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void initializePaging(){
 
-        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        myPagerAdapter = new listPagerAdapter();
         listPager.setAdapter(myPagerAdapter);
         listPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(listPager);
@@ -134,7 +148,8 @@ public class MainActivity extends AppCompatActivity{
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.d("itemListApp", "handling intent: " + query);
 
-            EventBus.getDefault().post(new searchMessage(query));
+            //EventBus.getDefault().post(new searchMessage(query));
+            presenter.searchFor(query);
 
             MenuItem menuItem = this.menu.findItem(R.id.search);
             menuItem.collapseActionView();
@@ -167,6 +182,9 @@ public class MainActivity extends AppCompatActivity{
         if (currentSearch != null){
             getSupportActionBar().setTitle(currentSearch);
         }
+        if (presenter != null){
+            presenter.onResume(this);
+        }
     }
 
     @Override
@@ -175,6 +193,8 @@ public class MainActivity extends AppCompatActivity{
 
         outState.putString("currentSearchString", currentSearch);
         outState.putStringArrayList("searchStrings", searchStrings);
+        outState.putParcelableArrayList("presenterList", presenter.list);
+        outState.putInt("page", presenter.page);
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
 
@@ -184,7 +204,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onStop() {
         super.onStop();
 //        EventBus.getDefault().unregister(this);
-
+        presenter.decouple();
 
     }
 
@@ -228,6 +248,116 @@ public class MainActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setItems(ArrayList<ImageDataItem> listData) {
+
+        for (int i = 0; i < 3; i ++){
+            myPagerAdapter.setListAdapterForPosition(new ImageListAdapter(listData), i);
+        }
+
+    }
+
+    @Override
+    public void addItems(ArrayList<ImageDataItem> listData) {
+
+        for (int i = 0; i < 3; i ++){
+            myPagerAdapter.updateAdapter(i);
+        }
+
+    }
+
+    @Override
+    public void displayLoading() {
+        Log.d("itemListApp", "displayLoading Activity");
+
+
+    }
+
+    @Override
+    public void displayError() {
+        Log.d("itemListApp", "displayError Activity");
+    }
+
+
+    public class listPagerAdapter extends PagerAdapter{
+
+        smartListView[] listViews = new smartListView[3];
+        ImageListAdapter[] listViewAdapters = new ImageListAdapter[3];
+
+
+        public void setListAdapterForPosition(ImageListAdapter ila, int position){
+            listViews[position].setAdapter(ila);
+            listViewAdapters[position] = ila;
+        }
+
+        public void updateAdapter(int i ) {
+            if (listViewAdapters[i] != null) {
+                listViewAdapters[i].notifyDataSetChanged();
+
+            }
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position){
+                case 0:
+                    return "bacon";
+                case 1:
+                    return "salad";
+                case 2:
+                    return "spoons";
+
+            }
+            return "default";
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            smartListView lv = new smartListView(MainActivity.this);
+
+            listViews[position] = lv;
+            lv.setScrollListener(new EndlessScrollListener() {
+                @Override
+                public void onLoadMore(int page, int totalItemsCount) {
+                    presenter.loadMore(currentSearch);
+
+                }
+
+                @Override
+                public void onLoadFail() {
+                    setLoading(false);
+
+                }
+            });
+
+            if (presenter.list != null){
+                lv.setAdapter(new ImageListAdapter(presenter.list));
+            }
+
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            container.addView(lv, layoutParams);
+            return lv;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            listViews[position] = null;
+            listViewAdapters[position] = null;
+
+            super.destroyItem(container, position, object);
+        }
     }
 
 }

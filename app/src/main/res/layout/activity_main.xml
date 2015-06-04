@@ -7,13 +7,14 @@
     android:fitsSystemWindows="true"
     android:id="@+id/drawerLayout">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
 
 
-            <android.support.design.widget.AppBarLayout
+
+        <android.support.design.widget.AppBarLayout
                 android:id="@+id/appBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -21,23 +22,26 @@
                 android:background="@color/transparent">
                 <android.support.v7.widget.Toolbar
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:id="@+id/searchInput"
-                    android:background="@color/transparent"/>
+                    android:background="@color/transparent"
+                    app:layout_scrollFlags="scroll|enterAlways"/>
                  <android.support.design.widget.TabLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tabLayout"/>
-            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
+
         <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/listPager"
-            android:layout_below="@id/appBar"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"

@@ -14,26 +14,26 @@ import java.util.ArrayList;
 /**
  * Created by oliverbudiardjo on 6/3/15.
  */
-public class MyPagerAdapter extends FragmentPagerAdapter {
-
-    public MyPagerAdapter(FragmentManager fm){
-        super(fm);
-    }
-
-    @Override
-    public int getCount() {
-        return 3;
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        return new listFragmentBuilder( new ArrayList<ImageDataItem>(), Integer.toString(position))
-                .build();
-
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return Integer.toString(position);
-    }
-}
+//public class MyPagerAdapter extends FragmentPagerAdapter {
+//
+//    public MyPagerAdapter(FragmentManager fm){
+//        super(fm);
+//    }
+//
+//    @Override
+//    public int getCount() {
+//        return 3;
+//    }
+//
+//    @Override
+//    public Fragment getItem(int position) {
+//        return new listFragmentBuilder( new ArrayList<ImageDataItem>(), Integer.toString(position))
+//                .build();
+//
+//    }
+//
+//    @Override
+//    public CharSequence getPageTitle(int position) {
+//        return Integer.toString(position);
+//    }
+//}

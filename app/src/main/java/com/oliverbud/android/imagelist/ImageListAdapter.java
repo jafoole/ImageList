@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,58 +22,55 @@ import java.util.ArrayList;
 /**
  * Created by oliverbud on 5/26/15.
  */
-public class ImageListAdapter extends ArrayAdapter<ImageDataItem>{
+public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.ViewHolder>{
 
-    private Context context;
     private ArrayList<ImageDataItem> dataItems;
 
 
-
-    static class ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
         public TextView name;
         public FrameLayout layout;
+
+        public ViewHolder(View view){
+            super(view);
+            image = (ImageView)view.findViewById(R.id.imageView);
+            name = (TextView)view.findViewById(R.id.textView);
+            layout = (FrameLayout)view.findViewById(R.id.layout);
+
+        }
     }
 
-    public ArrayList<ImageDataItem> getData(){
-        return  this.dataItems;
-    }
-
-    public ImageListAdapter(Context context, ArrayList<ImageDataItem> dataItems){
-        super(context, 0, dataItems);
-        this.context = context;
+    public ImageListAdapter(ArrayList<ImageDataItem> dataItems){
         this.dataItems = dataItems;
 
+    }
 
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+        String url = dataItems.get(i).url;
+
+        viewHolder.name.setText(dataItems.get(i).name);
+
+        if (url != null) {
+            viewHolder.image.setLayoutParams(new LinearLayout.LayoutParams(dataItems.get(i).width, dataItems.get(i).height));
+            Picasso.with(App.getAppContext()).load(url).placeholder(new ColorDrawable(Color.TRANSPARENT)).into(viewHolder.image);
+        }
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView = convertView;
-        if (rowView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            rowView = inflater.inflate(R.layout.image_row_layout, parent, false);
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.image = (ImageView) rowView
-                    .findViewById(R.id.imageView);
-            viewHolder.name = (TextView) rowView
-                    .findViewById(R.id.textView);
-            viewHolder.layout = (FrameLayout) rowView
-                    .findViewById(R.id.layout);
-            rowView.setTag(viewHolder);
-        }
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View itemView = LayoutInflater.
+                from(viewGroup.getContext()).
+                inflate(R.layout.image_row_layout, viewGroup, false);
 
-
-        ViewHolder holder = (ViewHolder) rowView.getTag();
-        String url = getItem(position).url;
-
-        holder.name.setText(getItem(position).name);
-
-        if (url != null) {
-            holder.image.setLayoutParams(new LinearLayout.LayoutParams(getItem(position).width, getItem(position).height));
-            Picasso.with(context).load(url).placeholder(new ColorDrawable(Color.TRANSPARENT)).into(holder.image);
-        }
-        return rowView;
+        return new ViewHolder(itemView);
     }
+
+    @Override
+    public int getItemCount() {
+        return dataItems.size();
+    }
+
 }
