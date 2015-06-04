@@ -116,7 +116,6 @@ public class ImageListPresenter {
                 list.addAll(moreList);
 
                 imageListView.addItems(moreList);
-                page += 1;
                 Log.d("itemListApp", "increment page");
 
             }
@@ -130,7 +129,7 @@ public class ImageListPresenter {
         };
 
         Log.d("itemListApp", "page: " + page);
-
+        page += 1;
         service.search(1.0f, moreString, 8, page * 8, null, "small|medium", callback);
     }
 
