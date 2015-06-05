@@ -1,7 +1,5 @@
 package com.oliverbud.android.imagelist.Networking;
 
-import java.util.Map;
-
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -19,6 +17,6 @@ public interface ImageApi {
             @Query("start") int start,
             @Query("userip") String ip,
             @Query("imgsz") String size,
-            Callback<Map<String,Object>> callback
+            Callback<NetworkResponseData> callback
     );
 }

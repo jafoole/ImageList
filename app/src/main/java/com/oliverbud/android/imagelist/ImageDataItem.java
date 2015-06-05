@@ -1,8 +1,11 @@
 package com.oliverbud.android.imagelist;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.Random;
 
 /**
  * Created by oliverbud on 5/26/15.
@@ -12,8 +15,9 @@ public class ImageDataItem implements Parcelable{
     String url;
     Integer width;
     Integer height;
-    String name;
-    int color;
+    String imageId;
+
+    int color = -1;
 
     public void setUrl(String url){
         this.url = url;
@@ -27,13 +31,10 @@ public class ImageDataItem implements Parcelable{
         this.height = height;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setImageId(String imageId){
+        this.imageId = imageId;
     }
 
-    public void setColor(int color){
-        this.color = color;
-    }
 
 
     @Override
@@ -46,7 +47,7 @@ public class ImageDataItem implements Parcelable{
         bundle.putString("url", url);
         bundle.putInt("width", width);
         bundle.putInt("height", height);
-        bundle.putString("name", name);
+        bundle.putString("imageId", imageId);
 
         out.writeBundle(bundle);
 

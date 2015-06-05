@@ -17,6 +17,7 @@ import dagger.ObjectGraph;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.Observable;
 
 /**
  * Created by oliverbud on 5/26/15.
@@ -70,6 +71,7 @@ public class ImageListPresenter {
     }
 
     public void searchFor(String searchString) {
+
 
         page = 0;
         Callback callback = new Callback() {

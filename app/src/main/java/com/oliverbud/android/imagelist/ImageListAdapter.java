@@ -1,5 +1,6 @@
 package com.oliverbud.android.imagelist;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import de.greenrobot.event.EventBus;
 
@@ -57,7 +59,12 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         String url = dataItems.get(i).url;
 
-        viewHolder.name.setText(dataItems.get(i).name);
+        viewHolder.name.setText(dataItems.get(i).imageId);
+
+        if (dataItems.get(i).color == -1){
+            Random rnd = new Random();
+            dataItems.get(i).color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        }
 
         if (url != null) {
             viewHolder.image.setLayoutParams(new LinearLayout.LayoutParams(dataItems.get(i).width, dataItems.get(i).height));
