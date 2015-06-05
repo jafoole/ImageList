@@ -2,23 +2,21 @@ package com.oliverbud.android.imagelist;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+
+import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 
 import de.greenrobot.event.EventBus;
 
 /**
  * Created by oliverbudiardjo on 6/4/15.
  */
-public class smartListView extends LinearLayout {
+public class SmartListView extends LinearLayout {
 
     RecyclerView lv;
 
@@ -28,7 +26,7 @@ public class smartListView extends LinearLayout {
 
     EventBus bus = EventBus.getDefault();
 
-    public smartListView(Context context){
+    public SmartListView(Context context){
         super(context);
 
         View view =  LayoutInflater.from(getContext()).inflate(

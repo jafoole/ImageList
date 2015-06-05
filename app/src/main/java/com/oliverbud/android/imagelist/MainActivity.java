@@ -1,13 +1,8 @@
 package com.oliverbud.android.imagelist;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -22,14 +17,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
+
+import com.oliverbud.android.imagelist.Application.App;
+import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 
 import java.util.ArrayList;
 
@@ -76,9 +72,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
         spinner.setIndeterminate(true);
         spinner.setVisibility(View.GONE);
-//        if (presenter == null) {
-//            presenter = new ImageListPresenter(this);
-//        }
+
 
         activityGraph = ((App) this.getApplication()).createScopedGraph(new PresenterModule(MainActivity.this));
         activityGraph.inject(this);
@@ -116,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
                     for (int i = 0; i < 3; i ++){
                         myPagerAdapter.setLoadTrue(i);
                     }
-                    //EventBus.getDefault().post(new searchMessage(searchParam));
                     presenter.searchFor(searchParam);
 
                     EventBus.getDefault().post(new GenericEvent("SNACKS"));
@@ -142,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     }
 
     public void initializePaging(){
+        Log.d("itemListApp", "initializePaging");
 
         myPagerAdapter = new listPagerAdapter();
         listPager.setAdapter(myPagerAdapter);
@@ -170,8 +164,6 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.d("itemListApp", "handling intent: " + query);
-
-            //EventBus.getDefault().post(new searchMessage(query));
 
             for (int i = 0; i < 3; i ++){
                 myPagerAdapter.setLoadTrue(i);
@@ -209,9 +201,6 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         if (currentSearch != null){
             getSupportActionBar().setTitle(currentSearch);
         }
-//        if (presenter != null){
-//            presenter.onResume(this);
-//        }
     }
 
     @Override
@@ -231,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-//        presenter.decouple();
 
     }
 
@@ -333,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
     public class listPagerAdapter extends PagerAdapter{
 
-        smartListView[] listViews = new smartListView[3];
+        SmartListView[] listViews = new SmartListView[3];
         ImageListAdapter[] listViewAdapters = new ImageListAdapter[3];
 
 
@@ -383,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            smartListView lv = new smartListView(MainActivity.this);
+            SmartListView lv = new SmartListView(MainActivity.this);
 
             listViews[position] = lv;
 

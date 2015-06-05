@@ -1,10 +1,11 @@
 package com.oliverbud.android.imagelist;
 
+import com.oliverbud.android.imagelist.Application.AppModule;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
 
 /**
  * Created by oliverbudiardjo on 6/3/15.

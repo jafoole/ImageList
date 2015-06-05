@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.EventBus;
 
 /**
  * Created by oliverbudiardjo on 6/4/15.

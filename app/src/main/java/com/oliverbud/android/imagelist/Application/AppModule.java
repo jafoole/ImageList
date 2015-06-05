@@ -1,6 +1,8 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.Application;
 
 import android.content.Context;
+
+import com.oliverbud.android.imagelist.Application.App;
 
 import javax.inject.Singleton;
 

@@ -1,7 +1,9 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.Application;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        LeakCanary.install(this);
         App.context = getApplicationContext();
         objectGraph = ObjectGraph.create(getModules().toArray());
         objectGraph.inject(this);
