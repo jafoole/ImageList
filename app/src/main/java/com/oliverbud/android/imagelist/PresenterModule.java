@@ -13,7 +13,7 @@ import dagger.Provides;
 
 @Module(
         injects =
-                MainActivity.class,
+                ListsDisplayFragment.class,
                 addsTo = AppModule.class,
                 complete = false
 

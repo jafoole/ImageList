@@ -35,11 +35,13 @@
                     android:id="@+id/tabLayout"/>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:layout_width="match_parent"
+
+        <fragment
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/listPager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:name="com.oliverbud.android.imagelist.ListsDisplayFragment"
+            android:tag="listsFragment"/>
+
 
         <ProgressBar
             android:layout_width="60dp"
@@ -49,19 +51,11 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <!--<android.support.design.widget.NavigationView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start"-->
-        <!--android:id="@+id/navigation"-->
-        <!--app:menu="@menu/drawer"/>-->
 
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:name="com.oliverbud.android.imagelist.NavigationFragment"
-        android:layout_gravity="start"
-        android:id="@+id/navigation"
-        app:menu="@menu/drawer"/>
+        android:layout_gravity="start"/>
 
 </android.support.v4.widget.DrawerLayout>

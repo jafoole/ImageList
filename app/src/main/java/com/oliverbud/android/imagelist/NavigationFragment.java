@@ -93,6 +93,7 @@ public class NavigationFragment extends Fragment implements NavView{
         Log.d("itemListApp", "onSaveInstanceState size: " + navPresenter.navList.size());
 
         outState.putStringArrayList("navList", navPresenter.navList);
+
         super.onSaveInstanceState(outState);
 
     }
