@@ -1,6 +1,7 @@
 package com.oliverbud.android.imagelist;
 
 import com.oliverbud.android.imagelist.Application.AppModule;
+import com.oliverbud.android.imagelist.UI.ListsDisplayFragment;
 
 import javax.inject.Singleton;
 

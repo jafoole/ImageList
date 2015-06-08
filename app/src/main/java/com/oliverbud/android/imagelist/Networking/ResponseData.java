@@ -1,6 +1,6 @@
 package com.oliverbud.android.imagelist.Networking;
 
-import com.oliverbud.android.imagelist.ImageDataItem;
+import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 
 import org.parceler.Parcel;
 

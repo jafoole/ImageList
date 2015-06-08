@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
-import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
+import com.oliverbud.android.imagelist.NavView;
+import com.oliverbud.android.imagelist.NavigationModule;
+import com.oliverbud.android.imagelist.NavigationPresenter;
+import com.oliverbud.android.imagelist.R;
 
 import java.util.ArrayList;
 
@@ -24,17 +27,16 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
-import icepick.Icepick;
-import icepick.Icicle;
 
 /**
  * Created by oliverbudiardjo on 6/8/15.
  */
-public class NavigationFragment extends Fragment implements NavView{
+public class NavigationFragment extends Fragment implements NavView {
 
     @InjectView(R.id.navigation) NavigationView navigation;
 
-    @Inject NavigationPresenter navPresenter;
+    @Inject
+    NavigationPresenter navPresenter;
 
     ObjectGraph activityGraph;
 

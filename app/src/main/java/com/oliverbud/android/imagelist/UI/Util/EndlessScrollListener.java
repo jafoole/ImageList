@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI.Util;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +26,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
         super.onScrolled(recyclerView, dx, dy);
 
         if (stopTrying){
+            Log.d("itemListApp", "stopTrying Load");
             return;
         }
 

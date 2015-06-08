@@ -1,17 +1,13 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,18 +17,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 
-import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
-import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
+import com.oliverbud.android.imagelist.ImageListPresenter;
+import com.oliverbud.android.imagelist.R;
+import com.oliverbud.android.imagelist.UI.ListsDisplayFragment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -42,7 +37,6 @@ import butterknife.InjectView;
 import butterknife.Optional;
 import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
-import de.greenrobot.event.util.ErrorDialogManager;
 import icepick.Icepick;
 
 

@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI.Util;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.GenericEvent;
+import com.oliverbud.android.imagelist.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

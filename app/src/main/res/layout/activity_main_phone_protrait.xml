@@ -39,7 +39,7 @@
         <fragment
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:name="com.oliverbud.android.imagelist.ListsDisplayFragment"
+            android:name="com.oliverbud.android.imagelist.UI.ListsDisplayFragment"
             android:tag="listsFragment"/>
 
 
@@ -55,7 +55,7 @@
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:name="com.oliverbud.android.imagelist.NavigationFragment"
+        android:name="com.oliverbud.android.imagelist.UI.NavigationFragment"
         android:layout_gravity="start"/>
 
 </android.support.v4.widget.DrawerLayout>

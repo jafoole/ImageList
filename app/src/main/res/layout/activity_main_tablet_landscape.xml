@@ -10,7 +10,7 @@
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:name="com.oliverbud.android.imagelist.NavigationFragment"
+        android:name="com.oliverbud.android.imagelist.UI.NavigationFragment"
         android:id="@+id/navigation"/>
 
     <android.support.design.widget.CoordinatorLayout
@@ -47,7 +47,7 @@
         <fragment
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:name="com.oliverbud.android.imagelist.ListsDisplayFragment"
+            android:name="com.oliverbud.android.imagelist.UI.ListsDisplayFragment"
             android:tag="listsFragment"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 

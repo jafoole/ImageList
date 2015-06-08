@@ -1,10 +1,8 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -14,9 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.oliverbud.android.imagelist.Application.App;
-import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
+import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
+import com.oliverbud.android.imagelist.ImageListPresenter;
+import com.oliverbud.android.imagelist.ImageListView;
+import com.oliverbud.android.imagelist.PresenterModule;
+import com.oliverbud.android.imagelist.R;
+import com.oliverbud.android.imagelist.UI.Util.EndlessScrollListener;
+import com.oliverbud.android.imagelist.UI.Util.ImageListAdapter;
+import com.oliverbud.android.imagelist.UI.Util.SmartListView;
 
 import java.util.ArrayList;
 
@@ -114,6 +119,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     @Override
     public void setItems(ArrayList<ImageDataItem> listData) {
+        Log.d("itemListApp", "listData Fragment");
         for (int i = 0; i < 3; i ++){
 
             myPagerAdapter.setListAdapterForPosition(new ImageListAdapter(listData), i);
@@ -123,6 +129,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     @Override
     public void addItems(ArrayList<ImageDataItem> listData) {
+        Log.d("itemListApp", "addItems Fragment");
 
         for (int i = 0; i < 3; i ++){
             myPagerAdapter.updateAdapter(i);
@@ -132,7 +139,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     @Override
     public void displayLoading() {
-        Log.d("itemListApp", "displayLoading Activity");
+        Log.d("itemListApp", "displayLoading Fragment");
 
     }
 
@@ -141,7 +148,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
         for (int i = 0; i < 3; i ++) {
             myPagerAdapter.setLoadFalse(i);
         }
-        Log.d("itemListApp", "displayError Activity");
+        Log.d("itemListApp", "displayError Fragment");
     }
 
 

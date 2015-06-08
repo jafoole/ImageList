@@ -1,23 +1,19 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI.Util;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.Random;
 
 /**
  * Created by oliverbud on 5/26/15.
  */
 public class ImageDataItem implements Parcelable{
 
-    String url;
-    Integer width;
-    Integer height;
-    String imageId;
-
-    int color = -1;
+    public String url;
+    public Integer width;
+    public Integer height;
+    public String imageId;
+    public int color = -1;
 
     public void setUrl(String url){
         this.url = url;
@@ -34,6 +30,8 @@ public class ImageDataItem implements Parcelable{
     public void setImageId(String imageId){
         this.imageId = imageId;
     }
+
+
 
 
 

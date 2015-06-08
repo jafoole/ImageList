@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI.Util;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.oliverbud.android.imagelist.EventBus.GenericEvent;
+import com.oliverbud.android.imagelist.R;
+import com.oliverbud.android.imagelist.UI.Util.EndlessScrollListener;
 
 import de.greenrobot.event.EventBus;
 

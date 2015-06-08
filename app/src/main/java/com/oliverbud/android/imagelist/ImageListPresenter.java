@@ -1,23 +1,15 @@
 package com.oliverbud.android.imagelist;
 
 
-import android.graphics.Color;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-import dagger.ObjectGraph;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import rx.Observable;
 
 /**
  * Created by oliverbud on 5/26/15.
@@ -30,7 +22,7 @@ public class ImageListPresenter {
 
     public int page = 0;
 
-    ArrayList<ImageDataItem> list;
+    public ArrayList<ImageDataItem> list;
 
 
     @javax.inject.Inject
