@@ -3,9 +3,10 @@ package com.oliverbud.android.imagelist;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -21,18 +22,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 
 import com.oliverbud.android.imagelist.Application.App;
+import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.GenericEvent;
+import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.Optional;
 import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
@@ -42,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
     @InjectView(R.id.searchInput)Toolbar searchInput;
     @InjectView(R.id.listPager) ViewPager listPager;
-    @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
-    @InjectView(R.id.navigation) NavigationView navigation;
+    @Optional @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
+    @Optional @InjectView(R.id.linearLayout) LinearLayout linearLayout;
     @InjectView(R.id.tabLayout) TabLayout tabLayout;
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
     @InjectView(R.id.spinner)ProgressBar spinner;
@@ -67,8 +73,26 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
 
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+
+        if (isTablet(this)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            setContentView(R.layout.activity_main_tablet_landscape);
+            ButterKnife.inject(this);
+            setSupportActionBar(searchInput);
+
+        }
+        else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setContentView(R.layout.activity_main_phone_protrait);
+            ButterKnife.inject(this);
+            setSupportActionBar(searchInput);
+            abdt = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
+            drawerLayout.setDrawerListener(abdt);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            abdt.syncState();
+
+        }
 
         spinner.setIndeterminate(true);
         spinner.setVisibility(View.GONE);
@@ -77,14 +101,8 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         activityGraph = ((App) this.getApplication()).createScopedGraph(new PresenterModule(MainActivity.this));
         activityGraph.inject(this);
 
-        setSupportActionBar(searchInput);
 
         searchStrings = new ArrayList<String>();
-        abdt = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
-        drawerLayout.setDrawerListener(abdt);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        abdt.syncState();
 
 
 
@@ -93,45 +111,24 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             searchStrings = savedInstanceState.getStringArrayList("searchStrings");
             presenter.list = savedInstanceState.getParcelableArrayList("presenterList");
             presenter.page = savedInstanceState.getInt("page");
-            for (String searchString : searchStrings) {
-                navigation.getMenu().add(searchString);
-            }
+            EventBus.getDefault().post(new AddItemsEvent(searchStrings));
+
         }
 
 
 
-        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                String searchParam = (String)menuItem.getTitle();
-                drawerLayout.closeDrawer(GravityCompat.START);
-                if (!searchParam.equals(currentSearch)) {
-                    for (int i = 0; i < 3; i ++){
-                        myPagerAdapter.setLoadTrue(i);
-                    }
-                    presenter.searchFor(searchParam);
-
-                    EventBus.getDefault().post(new GenericEvent("SNACKS"));
-
-
-                    searchInput.setTitle(searchParam);
-                    currentSearch = searchParam;
-                    if (!searchStrings.contains(currentSearch)) {
-                        searchStrings.add(currentSearch);
-                    }
-                }
-                MenuItem searchItem = menu.findItem(R.id.search);
-                searchItem.collapseActionView();
-
-                return false;
-            }
-        });
 
         initializePaging();
 
         handleIntent(getIntent());
 
+    }
+
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     public void initializePaging(){
@@ -173,9 +170,12 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
             MenuItem menuItem = this.menu.findItem(R.id.search);
             menuItem.collapseActionView();
             searchInput.setTitle(query);
-            if (!containsItem(query)) {
-                navigation.getMenu().add(query);
-            }
+
+            ArrayList<String> addItems = new ArrayList<String>();
+            addItems.add(query);
+            EventBus.getDefault().post(new AddItemsEvent(addItems));
+
+
             currentSearch = query;
             if (!searchStrings.contains(currentSearch)) {
                 searchStrings.add(currentSearch);
@@ -183,15 +183,6 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
         }
     }
 
-    public boolean containsItem(String query){
-
-        for (int i = 0; i < navigation.getMenu().size(); i ++){
-            if (navigation.getMenu().getItem(i).getTitle().toString().toLowerCase().equals(query.toLowerCase())){
-                return true;
-            }
-        }
-        return false;
-    }
 
 
     @Override
@@ -244,6 +235,33 @@ public class MainActivity extends AppCompatActivity implements ImageListView{
                     .setAction("CLICK", myOnClickListener)
                     .show();
         }
+    }
+
+    public void onEvent(NavItemSelectedEvent event) {
+
+
+
+        String searchParam = (String)event.item.getTitle();
+        if (drawerLayout != null) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        if (!searchParam.equals(currentSearch)) {
+            for (int i = 0; i < 3; i ++){
+                myPagerAdapter.setLoadTrue(i);
+            }
+            presenter.searchFor(searchParam);
+
+            EventBus.getDefault().post(new GenericEvent("SNACKS"));
+
+
+            searchInput.setTitle(searchParam);
+            currentSearch = searchParam;
+            if (!searchStrings.contains(currentSearch)) {
+                searchStrings.add(currentSearch);
+            }
+        }
+        MenuItem searchItem = menu.findItem(R.id.search);
+        searchItem.collapseActionView();
     }
 
     Menu menu;
