@@ -12,7 +12,7 @@ import javax.inject.Inject;
 public class NavigationPresenter {
 
     NavView navigationView;
-    ArrayList<String> navList = new ArrayList<String>();
+    public ArrayList<String> navList = new ArrayList<String>();
 
     @Inject
     public NavigationPresenter( NavView navigationView){

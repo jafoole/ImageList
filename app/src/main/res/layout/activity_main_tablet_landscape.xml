@@ -10,7 +10,7 @@
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:name="com.oliverbud.android.imagelist.NavigationFragment"
+        android:name="com.oliverbud.android.imagelist.UI.NavigationFragment"
         android:id="@+id/navigation"/>
 
     <android.support.design.widget.CoordinatorLayout
@@ -19,6 +19,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:id="@+id/coordinatorLayout">
+
 
 
 
@@ -43,29 +44,16 @@
         </android.support.design.widget.AppBarLayout>
 
 
-
-    <android.support.v4.view.ViewPager
-            android:layout_width="match_parent"
+        <fragment
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/listPager"
+            android:name="com.oliverbud.android.imagelist.UI.ListsDisplayFragment"
+            android:tag="listsFragment"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-        <ProgressBar
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id="@+id/spinner"/>
-
-
 
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <!--<android.support.design.widget.NavigationView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_gravity="start"-->
-    <!--android:id="@+id/navigation"-->
-    <!--app:menu="@menu/drawer"/>-->
 </LinearLayout>
 
 

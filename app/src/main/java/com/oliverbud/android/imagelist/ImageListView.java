@@ -1,5 +1,7 @@
 package com.oliverbud.android.imagelist;
 
+import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
+
 import java.util.ArrayList;
 
 /**

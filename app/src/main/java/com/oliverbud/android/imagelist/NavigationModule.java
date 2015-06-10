@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist;
 import android.util.Log;
 
 import com.oliverbud.android.imagelist.Application.AppModule;
+import com.oliverbud.android.imagelist.UI.NavigationFragment;
 
 import javax.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
-import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
+import com.oliverbud.android.imagelist.NavView;
+import com.oliverbud.android.imagelist.NavigationModule;
+import com.oliverbud.android.imagelist.NavigationPresenter;
+import com.oliverbud.android.imagelist.R;
 
 import java.util.ArrayList;
 
@@ -24,17 +27,16 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
-import icepick.Icepick;
-import icepick.Icicle;
 
 /**
  * Created by oliverbudiardjo on 6/8/15.
  */
-public class NavigationFragment extends Fragment implements NavView{
+public class NavigationFragment extends Fragment implements NavView {
 
     @InjectView(R.id.navigation) NavigationView navigation;
 
-    @Inject NavigationPresenter navPresenter;
+    @Inject
+    NavigationPresenter navPresenter;
 
     ObjectGraph activityGraph;
 
@@ -48,15 +50,9 @@ public class NavigationFragment extends Fragment implements NavView{
 
         ButterKnife.inject(this, view);
 
-        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                EventBus.getDefault().post(new NavItemSelectedEvent(menuItem));
-
-
-                return false;
-            }
+        navigation.setNavigationItemSelectedListener(menuItem -> {
+            EventBus.getDefault().post(new NavItemSelectedEvent(menuItem));
+            return false;
         });
 
         for (int i = 0; i < navPresenter.navList.size(); i ++) {
@@ -93,11 +89,12 @@ public class NavigationFragment extends Fragment implements NavView{
         Log.d("itemListApp", "onSaveInstanceState size: " + navPresenter.navList.size());
 
         outState.putStringArrayList("navList", navPresenter.navList);
+
         super.onSaveInstanceState(outState);
 
     }
 
-    public boolean containsItem(String query) {
+    public boolean navigationMenuContainsItem(String query) {
 
         for (int i = 0; i < navigation.getMenu().size(); i++) {
             if (navigation.getMenu().getItem(i).getTitle().toString().toLowerCase().equals(query.toLowerCase())) {
@@ -117,7 +114,7 @@ public class NavigationFragment extends Fragment implements NavView{
         Log.d("itemListApp", "updateNavigationWithItems size: " + items.size());
 
         for (int i = 0; i < items.size(); i ++){
-            if (!containsItem(items.get(i))) {
+            if (!navigationMenuContainsItem(items.get(i))) {
                 navigation.getMenu().add(items.get(i));
             }
         }

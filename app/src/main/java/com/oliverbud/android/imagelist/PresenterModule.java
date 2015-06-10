@@ -1,6 +1,7 @@
 package com.oliverbud.android.imagelist;
 
 import com.oliverbud.android.imagelist.Application.AppModule;
+import com.oliverbud.android.imagelist.UI.ListsDisplayFragment;
 
 import javax.inject.Singleton;
 
@@ -13,7 +14,7 @@ import dagger.Provides;
 
 @Module(
         injects =
-                MainActivity.class,
+                ListsDisplayFragment.class,
                 addsTo = AppModule.class,
                 complete = false
 
