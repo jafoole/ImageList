@@ -39,13 +39,11 @@ public class NetworkManager {
                     callback.success(o.getResponseData().getResults(), null);
                 }
 
-
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.d("itemListApp", "search error: " + error);
-
                 callback.failure(error);
             }
         };

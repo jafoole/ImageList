@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist.UI;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -16,26 +17,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
-import com.oliverbud.android.imagelist.ImageListPresenter;
 import com.oliverbud.android.imagelist.R;
-import com.oliverbud.android.imagelist.UI.ListsDisplayFragment;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
-import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
 
@@ -49,16 +44,11 @@ public class MainActivity extends AppCompatActivity{
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
 
 
-
     String currentSearch = null;
-    ArrayList<String> searchStrings;
+    ArrayList<String> searchStrings = new ArrayList();
 
     ActionBarDrawerToggle abdt;
 
-    @Inject
-    ImageListPresenter presenter;
-
-    private ObjectGraph activityGraph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +67,7 @@ public class MainActivity extends AppCompatActivity{
 
         }
         else {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             setContentView(R.layout.activity_main_phone_protrait);
             ButterKnife.inject(this);
             setSupportActionBar(searchInput);
@@ -89,19 +79,14 @@ public class MainActivity extends AppCompatActivity{
             tabLayout.setupWithViewPager(((ListsDisplayFragment)getSupportFragmentManager().findFragmentByTag("listsFragment")).listsViewPager);
         }
 
-
         searchStrings = new ArrayList();
-
-
 
         if (savedInstanceState != null){
             currentSearch = savedInstanceState.getString("currentSearchString");
             searchStrings = savedInstanceState.getStringArrayList("searchStrings");
-
             EventBus.getDefault().post(new AddItemsEvent(searchStrings));
 
         }
-
         handleIntent(getIntent());
 
     }
@@ -136,8 +121,6 @@ public class MainActivity extends AppCompatActivity{
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.d("itemListApp", "handling intent: " + query);
 
-
-
             MenuItem menuItem = this.menu.findItem(R.id.search);
             menuItem.collapseActionView();
             searchInput.setTitle(query);
@@ -146,7 +129,6 @@ public class MainActivity extends AppCompatActivity{
             addItems.add(query);
             EventBus.getDefault().post(new AddItemsEvent(addItems));
             EventBus.getDefault().post(new SearchEvent(query));
-
 
             currentSearch = query;
             if (!searchStrings.contains(currentSearch)) {
@@ -195,8 +177,6 @@ public class MainActivity extends AppCompatActivity{
 
     public void onEvent(NavItemSelectedEvent event) {
 
-
-
         String searchParam = (String)event.item.getTitle();
         if (drawerLayout != null) {
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -217,7 +197,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -232,12 +211,9 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -247,9 +223,5 @@ public class MainActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
 
 }

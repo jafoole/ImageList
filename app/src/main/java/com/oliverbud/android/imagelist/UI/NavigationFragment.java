@@ -100,7 +100,7 @@ public class NavigationFragment extends Fragment implements NavView {
 
     }
 
-    public boolean containsItem(String query) {
+    public boolean navigationMenuContainsItem(String query) {
 
         for (int i = 0; i < navigation.getMenu().size(); i++) {
             if (navigation.getMenu().getItem(i).getTitle().toString().toLowerCase().equals(query.toLowerCase())) {
@@ -120,7 +120,7 @@ public class NavigationFragment extends Fragment implements NavView {
         Log.d("itemListApp", "updateNavigationWithItems size: " + items.size());
 
         for (int i = 0; i < items.size(); i ++){
-            if (!containsItem(items.get(i))) {
+            if (!navigationMenuContainsItem(items.get(i))) {
                 navigation.getMenu().add(items.get(i));
             }
         }

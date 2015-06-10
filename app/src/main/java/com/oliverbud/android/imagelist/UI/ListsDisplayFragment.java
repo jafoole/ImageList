@@ -43,10 +43,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     @InjectView(R.id.listPager) public ViewPager listsViewPager;
     @InjectView(R.id.spinner) public ProgressBar spinner;
 
-    @Inject ImageListView ilv;
-
     listPagerAdapter myPagerAdapter;
-
 
     @Inject
     ImageListPresenter presenter;
@@ -133,7 +130,6 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
         Log.d("itemListApp", "listData Fragment");
         for (int i = 0; i < 3; i ++){
-
             myPagerAdapter.setListAdapterForPosition(new ImageListAdapter(listData), i);
         }
 
