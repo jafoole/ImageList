@@ -50,15 +50,9 @@ public class NavigationFragment extends Fragment implements NavView {
 
         ButterKnife.inject(this, view);
 
-        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                EventBus.getDefault().post(new NavItemSelectedEvent(menuItem));
-
-
-                return false;
-            }
+        navigation.setNavigationItemSelectedListener(menuItem -> {
+            EventBus.getDefault().post(new NavItemSelectedEvent(menuItem));
+            return false;
         });
 
         for (int i = 0; i < navPresenter.navList.size(); i ++) {

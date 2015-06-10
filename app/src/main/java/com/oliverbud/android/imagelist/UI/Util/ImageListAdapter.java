@@ -40,12 +40,9 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             name = (TextView)view.findViewById(R.id.textView);
             layout = (FrameLayout)view.findViewById(R.id.layout);
 
-            name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EventBus.getDefault().post(new GenericEvent("Hello everyone!"));
-                }
-            });
+            image.setOnClickListener((View v) ->
+                EventBus.getDefault().post(new GenericEvent("SNACKS"))
+            );
 
         }
     }
