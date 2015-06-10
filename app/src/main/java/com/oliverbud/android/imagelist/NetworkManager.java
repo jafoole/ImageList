@@ -31,15 +31,14 @@ public class NetworkManager {
     }
 
     public void search(String searchString, int rSize, int startPageLocation, String userIp, String size, final Callback callback){
+        Log.d("itemListApp", "NetworkManager search");
+
         service.search(version, searchString, rSize, startPageLocation, userIp, size)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<NetworkResponseData>() {
-                    @Override
-                    public void call(NetworkResponseData networkResponseData) {
-                        if(networkResponseData.getResponseData() != null){
-                            callback.success(networkResponseData.getResponseData().getResults(), null);
-                        }
+                .subscribe(networkResponseData -> {
+                    if(networkResponseData.getResponseData() != null){
+                        callback.success(networkResponseData.getResponseData().getResults(), null);
                     }
                 });
     }
