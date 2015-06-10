@@ -8,8 +8,9 @@ import com.oliverbud.android.imagelist.Networking.NetworkResponseData;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by oliverbudiardjo on 6/4/15.
@@ -30,24 +31,17 @@ public class NetworkManager {
     }
 
     public void search(String searchString, int rSize, int startPageLocation, String userIp, String size, final Callback callback){
-
-        Callback<NetworkResponseData> networkCallback = new Callback<NetworkResponseData>() {
-            @Override
-            public void success(NetworkResponseData o, Response response) {
-                Log.d("itemListApp", "search success");
-                if (o.getResponseData() != null) {
-                    callback.success(o.getResponseData().getResults(), null);
-                }
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d("itemListApp", "search error: " + error);
-                callback.failure(error);
-            }
-        };
-
-        service.search(version, searchString, rSize, startPageLocation, userIp, size, networkCallback);
+        service.search(version, searchString, rSize, startPageLocation, userIp, size)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<NetworkResponseData>() {
+                    @Override
+                    public void call(NetworkResponseData networkResponseData) {
+                        if(networkResponseData.getResponseData() != null){
+                            callback.success(networkResponseData.getResponseData().getResults(), null);
+                        }
+                    }
+                });
     }
+
 }

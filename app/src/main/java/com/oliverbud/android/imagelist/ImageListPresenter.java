@@ -69,6 +69,8 @@ public class ImageListPresenter {
         Callback callback = new Callback() {
             @Override
             public void success(Object o, Response response) {
+                Log.d("itemListApp", "presenter callback, success");
+
                 list = (ArrayList<ImageDataItem>) o;
 
                 imageListView.setItems(list);
