@@ -40,13 +40,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:name="com.oliverbud.android.imagelist.UI.ListsDisplayFragment"
-            android:tag="listsFragment"/>
+            android:tag="listsFragment"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-
-        <ProgressBar
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id="@+id/spinner"/>
 
 
     </android.support.design.widget.CoordinatorLayout>

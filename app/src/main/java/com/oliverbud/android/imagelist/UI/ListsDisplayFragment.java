@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
@@ -40,6 +41,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     ObjectGraph activityGraph;
 
     @InjectView(R.id.listPager) public ViewPager listsViewPager;
+    @InjectView(R.id.spinner) public ProgressBar spinner;
 
     @Inject ImageListView ilv;
 
@@ -54,16 +56,19 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.lists_display_layout, container);
         ButterKnife.inject(this, view);
-
+        Log.d("itemListApp", "onCreateView ListDisplayFragment");
 
         listsViewPager.setAdapter(myPagerAdapter);
         listsViewPager.setOffscreenPageLimit(2);
+        spinner.setVisibility(View.GONE);
 
         return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
+        Log.d("itemListApp", "onAttach ListDisplayFragment");
+
         super.onAttach(activity);
         activityGraph = ((App) getActivity().getApplication()).createScopedGraph(new PresenterModule(ListsDisplayFragment.this));
         activityGraph.inject(this);
@@ -76,6 +81,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         Log.d("itemListApp", "onCreateFragment: " + (savedInstanceState != null));
         if (savedInstanceState != null){
             presenter.list = savedInstanceState.getParcelableArrayList("list");
@@ -106,6 +112,9 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     public void onEvent(SearchEvent event){
         presenter.searchFor(event.search);
+        for (int i = 0; i < 3; i ++){
+            myPagerAdapter.setLoadTrue(i);
+        }
     }
 
     public void onEvent(NavItemSelectedEvent event){
@@ -119,6 +128,9 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     @Override
     public void setItems(ArrayList<ImageDataItem> listData) {
+        spinner.setVisibility(View.GONE);
+        listsViewPager.setVisibility(View.VISIBLE);
+
         Log.d("itemListApp", "listData Fragment");
         for (int i = 0; i < 3; i ++){
 
@@ -140,6 +152,8 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     @Override
     public void displayLoading() {
         Log.d("itemListApp", "displayLoading Fragment");
+        spinner.setVisibility(View.VISIBLE);
+        listsViewPager.setVisibility(View.GONE);
 
     }
 
@@ -206,6 +220,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             SmartListView lv = new SmartListView(getActivity());
+            Log.d("itemListApp", "instantiateItem listPagerAdapter");
 
             listViews[position] = lv;
 

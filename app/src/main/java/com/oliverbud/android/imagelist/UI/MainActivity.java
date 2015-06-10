@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity{
     @Optional @InjectView(R.id.linearLayout) LinearLayout linearLayout;
     @InjectView(R.id.tabLayout) TabLayout tabLayout;
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
-    @InjectView(R.id.spinner)ProgressBar spinner;
 
 
 
@@ -90,8 +89,6 @@ public class MainActivity extends AppCompatActivity{
             tabLayout.setupWithViewPager(((ListsDisplayFragment)getSupportFragmentManager().findFragmentByTag("listsFragment")).listsViewPager);
         }
 
-        spinner.setIndeterminate(true);
-        spinner.setVisibility(View.GONE);
 
         searchStrings = new ArrayList();
 
