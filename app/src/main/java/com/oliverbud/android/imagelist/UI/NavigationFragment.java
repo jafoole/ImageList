@@ -7,16 +7,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
-import com.oliverbud.android.imagelist.NavView;
-import com.oliverbud.android.imagelist.NavigationModule;
-import com.oliverbud.android.imagelist.NavigationPresenter;
 import com.oliverbud.android.imagelist.R;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 

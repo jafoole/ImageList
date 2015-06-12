@@ -1,9 +1,8 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 import android.util.Log;
 
 import com.oliverbud.android.imagelist.Application.AppModule;
-import com.oliverbud.android.imagelist.UI.NavigationFragment;
 
 import javax.inject.Singleton;
 

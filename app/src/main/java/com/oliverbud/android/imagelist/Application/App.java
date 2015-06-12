@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist.Application;
 import android.app.Application;
 import android.content.Context;
 
+import com.oliverbud.android.imagelist.Networking.NetworkModule;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.util.Arrays;

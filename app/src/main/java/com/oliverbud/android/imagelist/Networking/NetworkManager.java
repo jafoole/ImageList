@@ -1,4 +1,4 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.Networking;
 
 
 import android.util.Log;

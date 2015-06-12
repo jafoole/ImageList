@@ -1,7 +1,7 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 import com.oliverbud.android.imagelist.Application.AppModule;
-import com.oliverbud.android.imagelist.UI.ListsDisplayFragment;
+import com.oliverbud.android.imagelist.Networking.NetworkManager;
 
 import javax.inject.Singleton;
 

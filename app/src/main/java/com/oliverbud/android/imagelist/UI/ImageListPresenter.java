@@ -1,8 +1,9 @@
-package com.oliverbud.android.imagelist;
+package com.oliverbud.android.imagelist.UI;
 
 
 import android.util.Log;
 
+import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 
 import java.util.ArrayList;

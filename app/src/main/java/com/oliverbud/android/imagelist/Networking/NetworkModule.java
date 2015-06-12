@@ -1,6 +1,6 @@
-package com.oliverbud.android.imagelist.Application;
+package com.oliverbud.android.imagelist.Networking;
 
-import com.oliverbud.android.imagelist.NetworkManager;
+import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.Networking.ImageApi;
 
 import javax.inject.Singleton;
