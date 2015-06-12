@@ -21,13 +21,10 @@ public class NetworkManager {
 
     final float version = 1.0f;
 
-    public NetworkManager(){
+    public NetworkManager(ImageApi service){
         Log.d("itemListApp", "Create NetworkManager");
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("https://ajax.googleapis.com")
-                .build();
-        service  = restAdapter.create(ImageApi.class);
+       this.service = service;
     }
 
     public void search(String searchString, int rSize, int startPageLocation, String userIp, String size, final Callback callback){

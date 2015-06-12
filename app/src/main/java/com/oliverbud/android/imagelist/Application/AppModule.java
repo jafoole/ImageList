@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.NetworkManager;
+import com.oliverbud.android.imagelist.Networking.ImageApi;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit.RestAdapter;
 
 /**
  * Created by oliverbudiardjo on 6/3/15.
@@ -34,8 +36,5 @@ public class AppModule {
         return app;
     }
 
-    @Provides @Singleton public NetworkManager provideNetworkManager() {
 
-        return new NetworkManager();
-    }
 }

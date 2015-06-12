@@ -29,7 +29,7 @@ public class App extends Application {
     }
 
     private List<Object> getModules() {
-        return Arrays.<Object>asList(new AppModule(this));
+        return Arrays.<Object>asList(new AppModule(this), new NetworkModule());
     }
 
     public ObjectGraph createScopedGraph(Object... modules) {
@@ -38,5 +38,9 @@ public class App extends Application {
 
     public static Context getAppContext() {
         return App.context;
+    }
+
+    public ObjectGraph getObjectGraph(){
+        return objectGraph;
     }
 }
