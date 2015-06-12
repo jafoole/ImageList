@@ -31,11 +31,6 @@ public class PresenterModule {
         return ilv;
     }
 
-    @Provides @Singleton public NetworkManager provideNetworkManager() {
-
-        return new NetworkManager();
-    }
-
     @Provides
     public ImageListPresenter provideImageListPresenter(ImageListView ilv, NetworkManager service){
         return new ImageListPresenter(ilv, service);

@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist.Application;
 import android.content.Context;
 
 import com.oliverbud.android.imagelist.Application.App;
+import com.oliverbud.android.imagelist.NetworkManager;
 
 import javax.inject.Singleton;
 
@@ -31,5 +32,10 @@ public class AppModule {
     @Singleton
     public Context provideApplicationContext() {
         return app;
+    }
+
+    @Provides @Singleton public NetworkManager provideNetworkManager() {
+
+        return new NetworkManager();
     }
 }
