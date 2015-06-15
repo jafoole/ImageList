@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,10 +20,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 
 
+import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
+import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
 import com.oliverbud.android.imagelist.R;
@@ -33,6 +39,8 @@ import butterknife.InjectView;
 import butterknife.Optional;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
+import rx.Observable;
+import rx.functions.Action1;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -40,8 +48,8 @@ public class MainActivity extends AppCompatActivity{
     @InjectView(R.id.searchInput)Toolbar searchInput;
     @Optional @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @Optional @InjectView(R.id.linearLayout) LinearLayout linearLayout;
-    @InjectView(R.id.tabLayout) TabLayout tabLayout;
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
+    @InjectView(R.id.collapsingToolbarLayout)CollapsingToolbarLayout collapsingToolbarLayout;
 
 
     String currentSearch = null;
@@ -62,7 +70,6 @@ public class MainActivity extends AppCompatActivity{
             setContentView(R.layout.activity_main_tablet_landscape);
             ButterKnife.inject(this);
             setSupportActionBar(searchInput);
-            tabLayout.setupWithViewPager(((ListsDisplayFragment)getSupportFragmentManager().findFragmentByTag("listsFragment")).listsViewPager);
 
 
         }
@@ -76,7 +83,6 @@ public class MainActivity extends AppCompatActivity{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
             abdt.syncState();
-            tabLayout.setupWithViewPager(((ListsDisplayFragment)getSupportFragmentManager().findFragmentByTag("listsFragment")).listsViewPager);
         }
 
         searchStrings = new ArrayList();
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity{
 
             MenuItem menuItem = this.menu.findItem(R.id.search);
             menuItem.collapseActionView();
-            searchInput.setTitle(query);
+//            collapsingToolbarLayout.setTitle(query);
 
             ArrayList<String> addItems = new ArrayList<String>();
             addItems.add(query);
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity{
         super.onResume();
         Log.d("itemListApp", "onResume Activity");
         if (currentSearch != null){
-            getSupportActionBar().setTitle(currentSearch);
+//            collapsingToolbarLayout.setTitle(currentSearch);
         }
     }
 
@@ -174,6 +180,19 @@ public class MainActivity extends AppCompatActivity{
         EventBus.getDefault().register(this);
     }
 
+    public void onEvent(ItemClickedEvent event){
+        Observable<String> observable = Observable.just("im an observable");
+        observable.subscribe(s -> {
+            event.setStatus(true);
+            event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
+            Snackbar
+                    .make((View) coordinatorLayout, event.getTitle(), Snackbar.LENGTH_LONG)
+                    .show();
+        });
+
+
+    }
+
 
     public void onEvent(NavItemSelectedEvent event) {
 
@@ -183,7 +202,7 @@ public class MainActivity extends AppCompatActivity{
         }
         if (!searchParam.equals(currentSearch)) {
 
-            searchInput.setTitle(searchParam);
+//            collapsingToolbarLayout.setTitle(searchParam);
             currentSearch = searchParam;
             if (!searchStrings.contains(currentSearch)) {
                 searchStrings.add(currentSearch);

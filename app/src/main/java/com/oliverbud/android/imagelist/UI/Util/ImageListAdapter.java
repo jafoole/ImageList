@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.GenericEvent;
+import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.R;
 import com.squareup.picasso.Picasso;
 
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import de.greenrobot.event.EventBus;
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by oliverbud on 5/26/15.
@@ -31,6 +34,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
+        public ImageView status;
         public TextView name;
         public FrameLayout layout;
 
@@ -39,12 +43,15 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             image = (ImageView)view.findViewById(R.id.imageView);
             name = (TextView)view.findViewById(R.id.textView);
             layout = (FrameLayout)view.findViewById(R.id.layout);
+            status = (ImageView)view.findViewById(R.id.status);
 
             image.setOnClickListener((View v) ->
                 EventBus.getDefault().post(new GenericEvent("SNACKS"))
             );
 
         }
+
+
     }
 
     public ImageListAdapter(ArrayList<ImageDataItem> dataItems){
@@ -54,7 +61,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
 
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ViewHolder viewHolder, final int i) {
         String url = dataItems.get(i).url;
 
         viewHolder.name.setText(dataItems.get(i).imageId);
@@ -64,11 +71,24 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             dataItems.get(i).color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         }
 
+        if (dataItems.get(i).status){
+            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
+        }
+        else{
+            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.blue)));
+
+        }
+
+
         if (url != null) {
             viewHolder.image.setLayoutParams(new LinearLayout.LayoutParams(dataItems.get(i).width, dataItems.get(i).height));
 
             Picasso.with(App.getAppContext()).load(url).placeholder(new ColorDrawable(dataItems.get(i).color)).into(viewHolder.image);
         }
+
+
+
+        viewHolder.layout.setOnClickListener(v -> EventBus.getDefault().post(new ItemClickedEvent(viewHolder.status, dataItems.get(i))));
     }
 
     @Override

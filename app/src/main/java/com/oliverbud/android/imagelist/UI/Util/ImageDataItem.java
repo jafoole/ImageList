@@ -15,6 +15,8 @@ public class ImageDataItem implements Parcelable{
     public String imageId;
     public int color = -1;
 
+    public boolean status = false;
+
     public void setUrl(String url){
         this.url = url;
     }
