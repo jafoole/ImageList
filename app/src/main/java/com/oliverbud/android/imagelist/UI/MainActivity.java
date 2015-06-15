@@ -30,6 +30,9 @@ import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
+import com.oliverbud.android.imagelist.Networking.NetworkManager;
+import com.oliverbud.android.imagelist.Networking.NetworkModule;
+import com.oliverbud.android.imagelist.Networking.PingApi;
 import com.oliverbud.android.imagelist.R;
 
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
 
 
@@ -53,9 +57,9 @@ public class MainActivity extends AppCompatActivity{
     @Optional @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @Optional @InjectView(R.id.linearLayout) LinearLayout linearLayout;
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
-//    @InjectView(R.id.collapsingToolbarLayout)CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Inject ImageIDKeeper idKeeper;
+//    @Inject NetworkManager networkManager;
 
     ObjectGraph activityGraph;
 
@@ -73,7 +77,6 @@ public class MainActivity extends AppCompatActivity{
         Icepick.restoreInstanceState(this, savedInstanceState);
 
         if (isTablet(this)){
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setContentView(R.layout.activity_main_tablet_landscape);
             ButterKnife.inject(this);
             setSupportActionBar(searchInput);
@@ -101,8 +104,9 @@ public class MainActivity extends AppCompatActivity{
 
         }
 
-        activityGraph = ((App) getApplication()).getObjectGraph();
+        activityGraph = ((App)getApplication()).getObjectGraph();
         activityGraph.inject(this);
+
         handleIntent(getIntent());
 
 
@@ -196,18 +200,40 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void onEvent(ItemClickedEvent event){
-        if (!event.getStatus()) {
+        if (event.getStatus() == 0) {
 
             idKeeper.addToList(event.getTitle());
-            Observable<String> observable = Observable.just("im an observable");
-            observable.subscribe(s -> {
-
-                event.setStatus(true);
-                event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
-                Snackbar
-                        .make((View) coordinatorLayout, event.getTitle(), Snackbar.LENGTH_LONG)
-                        .show();
-            });
+//            Observable<Object> observable = networkManager.ping();
+//            event.setStatus(1);
+//            event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.green)));
+//
+//            Subscriber pingSubscriber = new Subscriber() {
+//                @Override
+//                public void onCompleted() {
+//                    event.setStatus(3);
+//                    event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
+//                    Snackbar
+//                            .make((View) coordinatorLayout, "successful ping", Snackbar.LENGTH_LONG)
+//                            .show();
+//                }
+//
+//                @Override
+//                public void onError(Throwable e) {
+//                    event.setStatus(0);
+//                    event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.blue)));
+//                    idKeeper.removeFromList(event.getTitle());
+//                    Snackbar
+//                            .make((View) coordinatorLayout, "ping Failed", Snackbar.LENGTH_LONG)
+//                            .show();
+//                }
+//
+//                @Override
+//                public void onNext(Object o) {
+//
+//                }
+//            };
+//
+//            observable.subscribe(pingSubscriber);
 
         }
     }

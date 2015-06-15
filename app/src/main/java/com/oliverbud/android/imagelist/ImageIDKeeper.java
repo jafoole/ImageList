@@ -25,4 +25,10 @@ public class ImageIDKeeper {
             imageIdList.add(newItem);
         }
     }
+
+    public void removeFromList(String newItem){
+        if (containedInList(newItem)){
+            imageIdList.remove(newItem);
+        }
+    }
 }

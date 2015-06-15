@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist.Application;
 import android.content.Context;
 
 import com.oliverbud.android.imagelist.ImageIDKeeper;
+import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.UI.MainActivity;
 import com.oliverbud.android.imagelist.UI.NavigationModule;
 import com.oliverbud.android.imagelist.UI.PresenterModule;
@@ -35,12 +36,6 @@ public class AppModule {
     @Singleton
     public Context provideApplicationContext() {
         return app;
-    }
-
-    @Provides
-    @Singleton
-    public ImageIDKeeper provideIdKeeper(){
-        return new ImageIDKeeper();
     }
 
 

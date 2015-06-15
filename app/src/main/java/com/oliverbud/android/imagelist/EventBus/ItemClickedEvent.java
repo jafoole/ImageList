@@ -26,11 +26,11 @@ public class ItemClickedEvent {
         return statusView;
     }
 
-    public boolean getStatus(){
+    public int getStatus(){
         return this.item.status;
     }
 
-    public void setStatus(boolean status){
+    public void setStatus(int status){
         item.status = status;
     }
 }

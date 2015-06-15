@@ -2,6 +2,7 @@ package com.oliverbud.android.imagelist.Networking;
 
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.Networking.ImageApi;
+import com.oliverbud.android.imagelist.UI.MainActivity;
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
@@ -35,8 +36,18 @@ public class NetworkModule {
         return restAdapter.create(ImageApi.class);
     }
 
-    @Provides @Singleton public NetworkManager provideNetworkManager(ImageApi service) {
+    @Provides
+    @Singleton
+    public PingApi providePingApi(OkHttpClient client){
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://jsonplaceholder.typicode.com")
+                .setClient(new OkClient(client))
+                .build();
+        return restAdapter.create(PingApi.class);
+    }
 
-        return new NetworkManager(service);
+    @Provides @Singleton public NetworkManager provideNetworkManager(ImageApi imageService, PingApi pingService) {
+
+        return new NetworkManager(imageService, pingService);
     }
 }

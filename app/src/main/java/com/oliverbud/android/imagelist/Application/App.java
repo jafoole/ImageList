@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist.Application;
 import android.app.Application;
 import android.content.Context;
 
+import com.oliverbud.android.imagelist.ImageIdKeeperModule;
 import com.oliverbud.android.imagelist.Networking.NetworkModule;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -30,7 +31,7 @@ public class App extends Application {
     }
 
     private List<Object> getModules() {
-        return Arrays.<Object>asList(new AppModule(this), new NetworkModule());
+        return Arrays.<Object>asList(new AppModule(this), new NetworkModule(), new ImageIdKeeperModule());
     }
 
     public ObjectGraph createScopedGraph(Object... modules) {

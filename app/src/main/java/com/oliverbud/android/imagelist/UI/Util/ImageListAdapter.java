@@ -71,11 +71,15 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             dataItems.get(i).color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         }
 
-        if (dataItems.get(i).status){
-            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
+        if (dataItems.get(i).status == 0){
+            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.blue)));
+        }
+        else if (dataItems.get(i).status == 1){
+            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.green)));
+
         }
         else{
-            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.blue)));
+            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
 
         }
 

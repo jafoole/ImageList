@@ -48,7 +48,7 @@ public class ImageListPresenter {
                 ArrayList<ImageDataItem> moreList = (ArrayList<ImageDataItem>)o;
                 for (int i = 0; i < moreList.size(); i ++){
                     if (idKeeper.containedInList(moreList.get(i).imageId)){
-                        moreList.get(i).status = true;
+                        moreList.get(i).status = 3;
                     }
                 }
                 if (list != null && imageListView != null) {
@@ -87,7 +87,7 @@ public class ImageListPresenter {
 
                 for (int i = 0; i < list.size(); i ++){
                     if (idKeeper.containedInList(list.get(i).imageId)){
-                        list.get(i).status = true;
+                        list.get(i).status = 3;
                     }
                 }
 

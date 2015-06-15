@@ -6,8 +6,11 @@ import android.util.Log;
 import com.oliverbud.android.imagelist.Networking.ImageApi;
 import com.oliverbud.android.imagelist.Networking.NetworkResponseData;
 
+import javax.inject.Inject;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -17,20 +20,23 @@ import rx.schedulers.Schedulers;
  */
 public class NetworkManager {
 
-    ImageApi service;
+    ImageApi imageService;
+    PingApi pingService;
 
     final float version = 1.0f;
 
-    public NetworkManager(ImageApi service){
+    @Inject
+    public NetworkManager(ImageApi imageService, PingApi pingService){
         Log.d("itemListApp", "Create NetworkManager");
 
-       this.service = service;
+       this.imageService = imageService;
+        this.pingService = pingService;
     }
 
     public void search(String searchString, int rSize, int startPageLocation, String userIp, String size, final Callback callback){
         Log.d("itemListApp", "NetworkManager search");
 
-        service.search(version, searchString, rSize, startPageLocation, userIp, size)
+        imageService.search(version, searchString, rSize, startPageLocation, userIp, size)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(networkResponseData -> {
@@ -38,6 +44,13 @@ public class NetworkManager {
                         callback.success(networkResponseData.getResponseData().getResults(), null);
                     }
                 });
+    }
+
+    public Observable<Object> ping(){
+
+        return  pingService.ping()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }
