@@ -32,7 +32,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
     private ArrayList<ImageDataItem> dataItems;
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
         public ImageView status;
         public TextView name;
@@ -92,7 +92,10 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
 
 
 
-        viewHolder.layout.setOnClickListener(v -> EventBus.getDefault().post(new ItemClickedEvent(viewHolder.status, dataItems.get(i))));
+        viewHolder.layout.setOnClickListener(v -> {
+            EventBus.getDefault().post(new ItemClickedEvent(dataItems.get(i), i));
+            viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.green)));
+        });
     }
 
     @Override
@@ -109,4 +112,8 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
         return dataItems.size();
     }
 
+    @Override
+    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+        super.registerAdapterDataObserver(observer);
+    }
 }

@@ -17,6 +17,7 @@ import retrofit.client.OkClient;
  */
 @Module(
         library = true
+
 )
 public class NetworkModule {
 

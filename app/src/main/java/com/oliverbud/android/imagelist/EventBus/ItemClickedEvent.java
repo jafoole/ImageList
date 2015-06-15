@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
+import com.oliverbud.android.imagelist.UI.Util.ImageListAdapter;
 
 /**
  * Created by oliverbudiardjo on 6/15/15.
@@ -11,20 +12,17 @@ import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 public class ItemClickedEvent {
 
     ImageDataItem item;
-    ImageView statusView;
+    public int position;
 
-    public ItemClickedEvent(ImageView viewHolder, ImageDataItem item){
-        this.statusView = viewHolder;
+    public ItemClickedEvent( ImageDataItem item, int position){
         this.item = item;
+        this.position = position;
     }
 
     public String getTitle(){
         return item.imageId;
     }
 
-    public ImageView getStatusView(){
-        return statusView;
-    }
 
     public int getStatus(){
         return this.item.status;

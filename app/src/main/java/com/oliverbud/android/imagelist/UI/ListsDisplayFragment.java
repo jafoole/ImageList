@@ -3,6 +3,7 @@ package com.oliverbud.android.imagelist.UI;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,6 +18,7 @@ import android.widget.ProgressBar;
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
+import com.oliverbud.android.imagelist.EventBus.UpdateListAtPosition;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 import com.oliverbud.android.imagelist.R;
@@ -138,6 +140,20 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
         if (!event.item.equals(((MainActivity)getActivity()).currentSearch)) {
             scrollListener.tryLoading();
             presenter.searchFor(event.item.toString());
+        }
+    }
+
+    public void onEvent(UpdateListAtPosition event){
+        listAdapter.notifyItemChanged(event.position);
+        if (event.success){
+            Snackbar
+                    .make((View) ((MainActivity)getActivity()).getCoordinatorLayout(), "successful ping", Snackbar.LENGTH_LONG)
+                    .show();
+        }
+        else{
+            Snackbar
+                    .make((View) ((MainActivity)getActivity()).getCoordinatorLayout(), "ping Failed", Snackbar.LENGTH_LONG)
+                    .show();
         }
     }
 

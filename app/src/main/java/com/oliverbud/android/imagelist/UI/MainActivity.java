@@ -29,6 +29,7 @@ import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
+import com.oliverbud.android.imagelist.EventBus.UpdateListAtPosition;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.Networking.NetworkModule;
@@ -46,9 +47,13 @@ import butterknife.Optional;
 import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity{
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
 
     @Inject ImageIDKeeper idKeeper;
-//    @Inject NetworkManager networkManager;
+    NetworkManager networkManager;
 
     ObjectGraph activityGraph;
 
@@ -107,6 +112,10 @@ public class MainActivity extends AppCompatActivity{
         activityGraph = ((App)getApplication()).getObjectGraph();
         activityGraph.inject(this);
 
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://jsonplaceholder.typicode.com")
+                .build();
+        networkManager = new NetworkManager(null, restAdapter.create(PingApi.class));
         handleIntent(getIntent());
 
 
@@ -203,41 +212,40 @@ public class MainActivity extends AppCompatActivity{
         if (event.getStatus() == 0) {
 
             idKeeper.addToList(event.getTitle());
-//            Observable<Object> observable = networkManager.ping();
-//            event.setStatus(1);
-//            event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.green)));
-//
-//            Subscriber pingSubscriber = new Subscriber() {
-//                @Override
-//                public void onCompleted() {
-//                    event.setStatus(3);
-//                    event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
-//                    Snackbar
-//                            .make((View) coordinatorLayout, "successful ping", Snackbar.LENGTH_LONG)
-//                            .show();
-//                }
-//
-//                @Override
-//                public void onError(Throwable e) {
-//                    event.setStatus(0);
-//                    event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.blue)));
-//                    idKeeper.removeFromList(event.getTitle());
-//                    Snackbar
-//                            .make((View) coordinatorLayout, "ping Failed", Snackbar.LENGTH_LONG)
-//                            .show();
-//                }
-//
-//                @Override
-//                public void onNext(Object o) {
-//
-//                }
-//            };
-//
-//            observable.subscribe(pingSubscriber);
+            Observable<Object> observable = networkManager.ping();
+            event.setStatus(1);
+            Subscriber pingSubscriber = new Subscriber() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    event.setStatus(0);
+                    EventBus.getDefault().post(new UpdateListAtPosition(event.position, false));
+                    idKeeper.removeFromList(event.getTitle());
+
+                }
+
+                @Override
+                public void onNext(Object o) {
+                    event.setStatus(3);
+                    EventBus.getDefault().post(new UpdateListAtPosition(event.position, true));
+
+                }
+            };
+
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(pingSubscriber);
 
         }
     }
 
+    public CoordinatorLayout getCoordinatorLayout(){
+        return coordinatorLayout;
+    }
 
     public void onEvent(NavItemSelectedEvent event) {
 
