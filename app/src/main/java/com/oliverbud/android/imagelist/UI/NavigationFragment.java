@@ -58,12 +58,7 @@ public class NavigationFragment extends Fragment implements NavView {
 
         ButterKnife.inject(this, view);
 
-        history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EventBus.getDefault().post(new NavItemSelectedEvent(navPresenter.navList.get(position)));
-            }
-        });
+        history.setOnItemClickListener((parent, view1, position, id) ->  EventBus.getDefault().post(new NavItemSelectedEvent(navPresenter.navList.get(position))));
 
 
 

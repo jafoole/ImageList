@@ -24,7 +24,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         App.context = getApplicationContext();
         objectGraph = ObjectGraph.create(getModules().toArray());
         objectGraph.inject(this);
