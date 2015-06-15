@@ -9,9 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
+import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.R;
 
@@ -29,7 +33,15 @@ import de.greenrobot.event.EventBus;
  */
 public class NavigationFragment extends Fragment implements NavView {
 
-    @InjectView(R.id.navigation) NavigationView navigation;
+    @InjectView(R.id.history) ListView history;
+
+    @InjectView(R.id.saved) ListView saved;
+
+
+    ArrayAdapter<String> historyAdapter;
+
+    ArrayAdapter<String> savedAdapter;
+
 
     @Inject
     NavigationPresenter navPresenter;
@@ -46,14 +58,22 @@ public class NavigationFragment extends Fragment implements NavView {
 
         ButterKnife.inject(this, view);
 
-        navigation.setNavigationItemSelectedListener(menuItem -> {
-            EventBus.getDefault().post(new NavItemSelectedEvent(menuItem));
-            return false;
+        history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EventBus.getDefault().post(new NavItemSelectedEvent(navPresenter.navList.get(position)));
+            }
         });
 
-        for (int i = 0; i < navPresenter.navList.size(); i ++) {
-            navigation.getMenu().add(navPresenter.navList.get(i));
-        }
+
+
+        historyAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, navPresenter.navList);
+
+        history.setAdapter(historyAdapter);
+
+        savedAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, navPresenter.savedList);
+
+        saved.setAdapter(savedAdapter);
 
         return view;
     }
@@ -76,6 +96,8 @@ public class NavigationFragment extends Fragment implements NavView {
         Log.d("itemListApp", "onCreateFragment: " + (savedInstanceState != null));
         if (savedInstanceState != null){
             navPresenter.navList = savedInstanceState.getStringArrayList("navList");
+            navPresenter.savedList = savedInstanceState.getStringArrayList("savedList");
+
         }
 
     }
@@ -85,6 +107,7 @@ public class NavigationFragment extends Fragment implements NavView {
         Log.d("itemListApp", "onSaveInstanceState size: " + navPresenter.navList.size());
 
         outState.putStringArrayList("navList", navPresenter.navList);
+        outState.putStringArrayList("savedList", navPresenter.savedList);
 
         super.onSaveInstanceState(outState);
 
@@ -92,8 +115,8 @@ public class NavigationFragment extends Fragment implements NavView {
 
     public boolean navigationMenuContainsItem(String query) {
 
-        for (int i = 0; i < navigation.getMenu().size(); i++) {
-            if (navigation.getMenu().getItem(i).getTitle().toString().toLowerCase().equals(query.toLowerCase())) {
+        for (int i = 0; i < navPresenter.navList.size(); i++) {
+            if (navPresenter.navList.get(i).toLowerCase().equals(query.toLowerCase())) {
                 return true;
             }
         }
@@ -105,17 +128,23 @@ public class NavigationFragment extends Fragment implements NavView {
         navPresenter.updateNavItems(event.addItems);
     }
 
+    public void onEvent(ItemClickedEvent event) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add(event.getTitle());
+        navPresenter.updateSavedItems(list);
+    }
+
     @Override
     public void updateNavigationWithItems(ArrayList<String> items) {
         Log.d("itemListApp", "updateNavigationWithItems size: " + items.size());
 
-        for (int i = 0; i < items.size(); i ++){
-            if (!navigationMenuContainsItem(items.get(i))) {
-                navigation.getMenu().add(items.get(i));
-            }
-        }
+        historyAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void updateSavedWithItems(ArrayList<String> items) {
+        savedAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onStop() {

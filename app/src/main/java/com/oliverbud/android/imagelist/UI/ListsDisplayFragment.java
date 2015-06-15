@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
+import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 import com.oliverbud.android.imagelist.R;
 import com.oliverbud.android.imagelist.UI.Util.EndlessScrollListener;
@@ -49,6 +50,9 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     @Inject
     ImageListPresenter presenter;
+
+
+
 
     @Nullable
     @Override
@@ -131,7 +135,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     }
 
     public void onEvent(NavItemSelectedEvent event){
-        if (!event.item.toString().equals(((MainActivity)getActivity()).currentSearch)) {
+        if (!event.item.equals(((MainActivity)getActivity()).currentSearch)) {
             scrollListener.tryLoading();
             presenter.searchFor(event.item.toString());
         }
@@ -172,82 +176,4 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     }
 
 
-
-//    public class listPagerAdapter extends PagerAdapter {
-//
-//        SmartListView[] listViews = new SmartListView[3];
-//        ImageListAdapter[] listViewAdapters = new ImageListAdapter[3];
-//
-//
-//        public void setListAdapterForPosition(ImageListAdapter ila, int position){
-//            listViews[position].setAdapter(ila);
-//            listViewAdapters[position] = ila;
-//        }
-//
-//        public void updateAdapter(int i ) {
-//            if (listViewAdapters[i] != null) {
-//                listViewAdapters[i].notifyDataSetChanged();
-//
-//            }
-//        }
-//
-//        public void setLoadFalse(int i){
-//            listViews[i].getScrollListener().stopLoading();
-//        }
-//
-//        public void setLoadTrue(int i){
-//            listViews[i].getScrollListener().tryLoading();
-//        }
-//
-//        @Override
-//        public boolean isViewFromObject(View view, Object object) {
-//            return view == object;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return 3;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            switch (position){
-//                case 0:
-//                    return "bacon";
-//                case 1:
-//                    return "salad";
-//                case 2:
-//                    return "spoons";
-//
-//            }
-//            return "default";
-//        }
-//
-//        @Override
-//        public Object instantiateItem(ViewGroup container, int position) {
-//            SmartListView lv = new SmartListView(getActivity());
-//            Log.d("itemListApp", "instantiateItem listPagerAdapter");
-//
-//            listViews[position] = lv;
-//
-
-//
-//            if (presenter.list != null){
-//                lv.setAdapter(new ImageListAdapter(presenter.list));
-//            }
-//
-//
-//            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//            container.addView(lv, layoutParams);
-//            return lv;
-//        }
-//
-//        @Override
-//        public void destroyItem(ViewGroup container, int position, Object object) {
-//            listViews[position] = null;
-//            listViewAdapters[position] = null;
-//
-//            super.destroyItem(container, position, object);
-//        }
-//    }
 }

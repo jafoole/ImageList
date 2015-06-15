@@ -26,6 +26,10 @@ public class ItemClickedEvent {
         return statusView;
     }
 
+    public boolean getStatus(){
+        return this.item.status;
+    }
+
     public void setStatus(boolean status){
         item.status = status;
     }

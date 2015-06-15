@@ -29,14 +29,18 @@ import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
+import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.R;
 
 import java.util.ArrayList;
 
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
+import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
 import rx.Observable;
@@ -51,6 +55,9 @@ public class MainActivity extends AppCompatActivity{
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
     @InjectView(R.id.collapsingToolbarLayout)CollapsingToolbarLayout collapsingToolbarLayout;
 
+    @Inject ImageIDKeeper idKeeper;
+
+    ObjectGraph activityGraph;
 
     String currentSearch = null;
     ArrayList<String> searchStrings = new ArrayList();
@@ -93,7 +100,12 @@ public class MainActivity extends AppCompatActivity{
             EventBus.getDefault().post(new AddItemsEvent(searchStrings));
 
         }
+
+        activityGraph = ((App) getApplication()).getObjectGraph();
+        activityGraph.inject(this);
         handleIntent(getIntent());
+
+
 
     }
 
@@ -181,22 +193,26 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void onEvent(ItemClickedEvent event){
-        Observable<String> observable = Observable.just("im an observable");
-        observable.subscribe(s -> {
-            event.setStatus(true);
-            event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
-            Snackbar
-                    .make((View) coordinatorLayout, event.getTitle(), Snackbar.LENGTH_LONG)
-                    .show();
-        });
+        if (!event.getStatus()) {
 
+            idKeeper.addToList(event.getTitle());
+            Observable<String> observable = Observable.just("im an observable");
+            observable.subscribe(s -> {
 
+                event.setStatus(true);
+                event.getStatusView().setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.red)));
+                Snackbar
+                        .make((View) coordinatorLayout, event.getTitle(), Snackbar.LENGTH_LONG)
+                        .show();
+            });
+
+        }
     }
 
 
     public void onEvent(NavItemSelectedEvent event) {
 
-        String searchParam = (String)event.item.getTitle();
+        String searchParam = (String)event.item;
         if (drawerLayout != null) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }

@@ -8,4 +8,7 @@ import java.util.ArrayList;
 public interface NavView {
 
     public void updateNavigationWithItems(ArrayList<String> items);
+
+    public void updateSavedWithItems(ArrayList<String> items);
+
 }

@@ -3,10 +3,13 @@ package com.oliverbud.android.imagelist.UI;
 
 import android.util.Log;
 
+import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -25,12 +28,15 @@ public class ImageListPresenter {
 
     public ArrayList<ImageDataItem> list;
 
+    ImageIDKeeper idKeeper;
+
 
     @javax.inject.Inject
-    public ImageListPresenter(ImageListView imageListView, NetworkManager networkManager) {
+    public ImageListPresenter(ImageListView imageListView, NetworkManager networkManager, ImageIDKeeper idKeeper) {
         Log.d("itemListApp", "instantiate Presenter");
         this.imageListView = imageListView;
         this.networkManager = networkManager;
+        this.idKeeper = idKeeper;
 
     }
 
@@ -40,6 +46,11 @@ public class ImageListPresenter {
             @Override
             public void success(Object o, Response response) {
                 ArrayList<ImageDataItem> moreList = (ArrayList<ImageDataItem>)o;
+                for (int i = 0; i < moreList.size(); i ++){
+                    if (idKeeper.containedInList(moreList.get(i).imageId)){
+                        moreList.get(i).status = true;
+                    }
+                }
                 if (list != null && imageListView != null) {
                     for (int i = 0; i < moreList.size(); i ++) {
                         if (!list.contains(moreList.get(i))) {
@@ -73,6 +84,12 @@ public class ImageListPresenter {
                 Log.d("itemListApp", "presenter callback, success");
 
                 list = (ArrayList<ImageDataItem>) o;
+
+                for (int i = 0; i < list.size(); i ++){
+                    if (idKeeper.containedInList(list.get(i).imageId)){
+                        list.get(i).status = true;
+                    }
+                }
 
                 imageListView.setItems(list);
                 page += 1;

@@ -7,9 +7,9 @@ import android.view.MenuItem;
  */
 public class NavItemSelectedEvent {
 
-    public MenuItem item;
+    public String item;
 
-    public NavItemSelectedEvent(MenuItem item) {
+    public NavItemSelectedEvent(String item) {
         this.item = item;
     }
 

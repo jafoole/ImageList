@@ -9,4 +9,8 @@
     <string name="search_title">Search</string>
 
 
+    <string name="historyHeader">History</string>
+    <string name="savedHeader">Saved</string>
+
+
 </resources>

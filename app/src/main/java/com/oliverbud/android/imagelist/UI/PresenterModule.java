@@ -1,6 +1,7 @@
 package com.oliverbud.android.imagelist.UI;
 
 import com.oliverbud.android.imagelist.Application.AppModule;
+import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
 
 import javax.inject.Singleton;
@@ -32,8 +33,8 @@ public class PresenterModule {
     }
 
     @Provides
-    public ImageListPresenter provideImageListPresenter(ImageListView ilv, NetworkManager service){
-        return new ImageListPresenter(ilv, service);
+    public ImageListPresenter provideImageListPresenter(ImageListView ilv, NetworkManager service, ImageIDKeeper idKeeper){
+        return new ImageListPresenter(ilv, service, idKeeper);
 
     }
 }

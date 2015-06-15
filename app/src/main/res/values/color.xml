@@ -11,6 +11,11 @@
 
     <color name="blue">#0000FF</color>
     <color name="red">#FF0000</color>
+    <color name="yellow">#FFFF00</color>
+
+
+    <color name="grey">#AA8888</color>
+    <color name="darkGrey">#773030</color>
 
 
 
