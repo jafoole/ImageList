@@ -27,13 +27,9 @@
             android:id="@+id/appBar"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="192dp"
+            android:layout_height="wrap_content"
             android:layout_margin="-3dp">
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                android:id="@+id/collapsingToolbarLayout">
+
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
@@ -42,7 +38,6 @@
                 android:inputType="text"
                 android:id="@+id/searchInput"
                 app:layout_collapseMode="pin"/>
-            </android.support.design.widget.CollapsingToolbarLayout>
 
         </android.support.design.widget.AppBarLayout>
 

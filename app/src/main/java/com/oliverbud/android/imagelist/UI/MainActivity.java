@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity{
     @Optional @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @Optional @InjectView(R.id.linearLayout) LinearLayout linearLayout;
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
-    @InjectView(R.id.collapsingToolbarLayout)CollapsingToolbarLayout collapsingToolbarLayout;
+//    @InjectView(R.id.collapsingToolbarLayout)CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Inject ImageIDKeeper idKeeper;
 
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity{
 
             MenuItem menuItem = this.menu.findItem(R.id.search);
             menuItem.collapseActionView();
-//            collapsingToolbarLayout.setTitle(query);
+
 
             ArrayList<String> addItems = new ArrayList<String>();
             addItems.add(query);
@@ -149,6 +149,9 @@ public class MainActivity extends AppCompatActivity{
             EventBus.getDefault().post(new SearchEvent(query));
 
             currentSearch = query;
+            if (currentSearch != null){
+                searchInput.setTitle(currentSearch);
+            }
             if (!searchStrings.contains(currentSearch)) {
                 searchStrings.add(currentSearch);
             }
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity{
         super.onResume();
         Log.d("itemListApp", "onResume Activity");
         if (currentSearch != null){
-//            collapsingToolbarLayout.setTitle(currentSearch);
+            searchInput.setTitle(currentSearch);
         }
     }
 
@@ -218,7 +221,7 @@ public class MainActivity extends AppCompatActivity{
         }
         if (!searchParam.equals(currentSearch)) {
 
-//            collapsingToolbarLayout.setTitle(searchParam);
+            searchInput.setTitle(searchParam);
             currentSearch = searchParam;
             if (!searchStrings.contains(currentSearch)) {
                 searchStrings.add(currentSearch);
@@ -254,7 +257,11 @@ public class MainActivity extends AppCompatActivity{
         }
         if (id == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
+            Log.d("itemListApp", "homeSelected: " + id);
+
         }
+
+        Log.d("itemListApp", "onOptionsItemSelected: " + id);
 
         return super.onOptionsItemSelected(item);
     }
