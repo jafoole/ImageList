@@ -27,11 +27,12 @@ public class App extends Application {
 //        LeakCanary.install(this);
         App.context = getApplicationContext();
         objectGraph = ObjectGraph.create(getModules().toArray());
+        objectGraph = objectGraph.plus(new NetworkModule(), new ImageIdKeeperModule());
         objectGraph.inject(this);
     }
 
     private List<Object> getModules() {
-        return Arrays.<Object>asList(new AppModule(this), new NetworkModule(), new ImageIdKeeperModule());
+        return Arrays.<Object>asList(new AppModule(this));
     }
 
     public ObjectGraph createScopedGraph(Object... modules) {

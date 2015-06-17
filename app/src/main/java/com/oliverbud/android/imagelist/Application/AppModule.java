@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
+import com.oliverbud.android.imagelist.Networking.NetworkModule;
 import com.oliverbud.android.imagelist.UI.MainActivity;
 import com.oliverbud.android.imagelist.UI.NavigationModule;
 import com.oliverbud.android.imagelist.UI.PresenterModule;
@@ -19,9 +20,11 @@ import dagger.Provides;
 @Module(
         injects = {
                 App.class,
-                MainActivity.class
+                MainActivity.class,
+                NetworkManager.class
         },
-        library = true
+        library = true,
+        includes = NetworkModule.class
 
 )
 public class AppModule {

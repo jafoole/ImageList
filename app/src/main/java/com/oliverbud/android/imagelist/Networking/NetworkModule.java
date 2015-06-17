@@ -16,6 +16,7 @@ import retrofit.client.OkClient;
  * Created by oliverbudiardjo on 6/12/15.
  */
 @Module(
+        injects = MainActivity.class,
         library = true
 
 )

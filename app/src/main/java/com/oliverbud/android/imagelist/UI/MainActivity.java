@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity{
     @InjectView(R.id.coordinatorLayout)CoordinatorLayout coordinatorLayout;
 
     @Inject ImageIDKeeper idKeeper;
-    NetworkManager networkManager;
+    @Inject NetworkManager networkManager;
 
     ObjectGraph activityGraph;
 
@@ -111,11 +111,6 @@ public class MainActivity extends AppCompatActivity{
 
         activityGraph = ((App)getApplication()).getObjectGraph();
         activityGraph.inject(this);
-
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://jsonplaceholder.typicode.com")
-                .build();
-        networkManager = new NetworkManager(null, restAdapter.create(PingApi.class));
         handleIntent(getIntent());
 
 
