@@ -27,6 +27,8 @@ Dagger: dependency injection. its really great + easy to use once you get the ha
 
 RetroLambda: use Java 8 Lambda expressions. At compile time it generates the classes that the lambdas represent. cuts the ammound of code in half at least.
 
+
+ISSUE: Presenter is highly coupled to View when theres anything to do with lifecycle. Saving presenter state and registering/unregistering EventBus relies on the View to manage its lifecycle. Preferably there would be some way of doing this outside of the view. Since my Activity is not acting as view or Presenter, maybe lifecycle changes for presenters can be managed here. Problem with that approach is that as of right now, the activity has no handle on the presenters.
  
 
 
