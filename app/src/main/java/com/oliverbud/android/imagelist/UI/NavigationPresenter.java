@@ -2,9 +2,13 @@ package com.oliverbud.android.imagelist.UI;
 
 import android.util.Log;
 
+import com.oliverbud.android.imagelist.EventBus.removeSavedItem;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by oliverbudiardjo on 6/8/15.
@@ -21,6 +25,20 @@ public class NavigationPresenter {
     public NavigationPresenter( NavView navigationView){
         Log.d("itemListApp", "NavigationPresenterInstantiate");
         this.navigationView = navigationView;
+
+    }
+
+    public void registerBus(){
+        EventBus.getDefault().register(this);
+    }
+
+    public void unregisterBus(){
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEvent(removeSavedItem event){
+        Log.d("itemListApp", "removeSavedItem");
+        removeSavedItem(event.item);
     }
 
     public void updateNavItems(ArrayList<String> navList){

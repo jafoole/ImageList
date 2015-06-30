@@ -5,12 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 
 
@@ -33,8 +28,6 @@ import com.oliverbud.android.imagelist.EventBus.UpdateListAtPosition;
 import com.oliverbud.android.imagelist.EventBus.removeSavedItem;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
-import com.oliverbud.android.imagelist.Networking.NetworkModule;
-import com.oliverbud.android.imagelist.Networking.PingApi;
 import com.oliverbud.android.imagelist.R;
 
 import java.util.ArrayList;
@@ -48,12 +41,9 @@ import butterknife.Optional;
 import dagger.ObjectGraph;
 import de.greenrobot.event.EventBus;
 import icepick.Icepick;
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 

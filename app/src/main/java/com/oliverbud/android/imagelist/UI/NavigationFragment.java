@@ -121,9 +121,6 @@ public class NavigationFragment extends Fragment implements NavView {
         navPresenter.updateSavedItems(list);
     }
 
-    public void onEvent(removeSavedItem event) {
-        navPresenter.removeSavedItem(event.item);
-    }
 
     @Override
     public void updateNavigationWithItems(ArrayList<String> items) {
@@ -141,11 +138,15 @@ public class NavigationFragment extends Fragment implements NavView {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        navPresenter.unregisterBus();
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        navPresenter.registerBus();
+
     }
 }
