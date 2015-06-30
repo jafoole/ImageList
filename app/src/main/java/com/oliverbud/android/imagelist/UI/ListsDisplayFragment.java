@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
@@ -44,6 +45,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     @InjectView(R.id.imageList) public RecyclerView imageList;
     @InjectView(R.id.spinner) public ProgressBar spinner;
+    @InjectView(R.id.networkError) public TextView networkError;
 
     ImageListAdapter listAdapter;
     LinearLayoutManager layoutManager;
@@ -145,15 +147,16 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
 
     public void onEvent(UpdateListAtPosition event){
         listAdapter.notifyItemChanged(event.position);
-        if (event.success){
-            Snackbar
-                    .make((View) ((MainActivity)getActivity()).getCoordinatorLayout(), "successful ping", Snackbar.LENGTH_LONG)
-                    .show();
-        }
-        else{
-            Snackbar
-                    .make((View) ((MainActivity)getActivity()).getCoordinatorLayout(), "ping Failed", Snackbar.LENGTH_LONG)
-                    .show();
+        if (event.showToast) {
+            if (event.success) {
+                Snackbar
+                        .make((View) ((MainActivity) getActivity()).getCoordinatorLayout(), "successful ping", Snackbar.LENGTH_LONG)
+                        .show();
+            } else {
+                Snackbar
+                        .make((View) ((MainActivity) getActivity()).getCoordinatorLayout(), "ping Failed", Snackbar.LENGTH_LONG)
+                        .show();
+            }
         }
     }
 
@@ -161,6 +164,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     public void setItems(ArrayList<ImageDataItem> listData) {
         spinner.setVisibility(View.GONE);
         imageList.setVisibility(View.VISIBLE);
+        networkError.setVisibility(View.GONE);
 
         imageList.setAdapter(listAdapter = new ImageListAdapter(presenter.list));
 
@@ -181,13 +185,15 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
         Log.d("itemListApp", "displayLoading Fragment");
         spinner.setVisibility(View.VISIBLE);
         imageList.setVisibility(View.GONE);
+        networkError.setVisibility(View.GONE);
 
     }
 
     @Override
     public void displayError() {
         scrollListener.stopLoading();
-
+        spinner.setVisibility(View.GONE);
+        networkError.setVisibility(View.VISIBLE);
         Log.d("itemListApp", "displayError Fragment");
     }
 

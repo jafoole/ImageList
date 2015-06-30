@@ -43,6 +43,14 @@ public class NavigationPresenter {
 
     }
 
+    public void removeSavedItem(String item){
+        if (containsSavedItem(item)){
+            this.savedList.remove(item);
+        }
+        navigationView.updateSavedWithItems(this.savedList);
+
+    }
+
     public boolean containsNavItem(String query) {
 
         if (this.navList.size() == 0){

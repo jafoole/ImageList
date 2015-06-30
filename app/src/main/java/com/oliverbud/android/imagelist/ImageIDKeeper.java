@@ -31,4 +31,8 @@ public class ImageIDKeeper {
             imageIdList.remove(newItem);
         }
     }
+
+    public ArrayList<String> getImageIdList(){
+        return imageIdList;
+    }
 }

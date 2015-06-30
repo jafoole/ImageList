@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -39,9 +40,22 @@ public class NetworkManager {
         imageService.search(version, searchString, rSize, startPageLocation, userIp, size)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(networkResponseData -> {
-                    if(networkResponseData.getResponseData() != null){
-                        callback.success(networkResponseData.getResponseData().getResults(), null);
+                .subscribe(new Subscriber<NetworkResponseData>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.failure(null);
+                    }
+
+                    @Override
+                    public void onNext(NetworkResponseData networkResponseData) {
+                        if(networkResponseData.getResponseData() != null){
+                            callback.success(networkResponseData.getResponseData().getResults(), null);
+                        }
                     }
                 });
     }

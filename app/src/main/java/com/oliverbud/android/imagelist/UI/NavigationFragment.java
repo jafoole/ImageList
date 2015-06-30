@@ -17,6 +17,7 @@ import com.oliverbud.android.imagelist.Application.App;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
+import com.oliverbud.android.imagelist.EventBus.removeSavedItem;
 import com.oliverbud.android.imagelist.R;
 
 import java.util.ArrayList;
@@ -108,15 +109,6 @@ public class NavigationFragment extends Fragment implements NavView {
 
     }
 
-    public boolean navigationMenuContainsItem(String query) {
-
-        for (int i = 0; i < navPresenter.navList.size(); i++) {
-            if (navPresenter.navList.get(i).toLowerCase().equals(query.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void onEvent(AddItemsEvent event) {
 
@@ -127,6 +119,10 @@ public class NavigationFragment extends Fragment implements NavView {
         ArrayList<String> list = new ArrayList<>();
         list.add(event.getTitle());
         navPresenter.updateSavedItems(list);
+    }
+
+    public void onEvent(removeSavedItem event) {
+        navPresenter.removeSavedItem(event.item);
     }
 
     @Override

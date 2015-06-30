@@ -30,6 +30,7 @@ import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
 import com.oliverbud.android.imagelist.EventBus.SearchEvent;
 import com.oliverbud.android.imagelist.EventBus.UpdateListAtPosition;
+import com.oliverbud.android.imagelist.EventBus.removeSavedItem;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.Networking.NetworkModule;
@@ -218,15 +219,16 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onError(Throwable e) {
                     event.setStatus(0);
-                    EventBus.getDefault().post(new UpdateListAtPosition(event.position, false));
+                    EventBus.getDefault().post(new UpdateListAtPosition(event.position, false, true));
                     idKeeper.removeFromList(event.getTitle());
+                    EventBus.getDefault().post(new removeSavedItem(event.getTitle()));
 
                 }
 
                 @Override
                 public void onNext(Object o) {
                     event.setStatus(3);
-                    EventBus.getDefault().post(new UpdateListAtPosition(event.position, true));
+                    EventBus.getDefault().post(new UpdateListAtPosition(event.position, true, true));
 
                 }
             };
@@ -234,6 +236,13 @@ public class MainActivity extends AppCompatActivity{
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(pingSubscriber);
+
+        }
+        else if(event.getStatus() == 3){
+            event.setStatus(0);
+            idKeeper.removeFromList(event.getTitle());
+            EventBus.getDefault().post(new UpdateListAtPosition(event.position, true, false));
+            EventBus.getDefault().post(new removeSavedItem(event.getTitle()));
 
         }
     }

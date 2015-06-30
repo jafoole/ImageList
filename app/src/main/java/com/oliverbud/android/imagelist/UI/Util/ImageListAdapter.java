@@ -93,6 +93,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
 
 
         viewHolder.layout.setOnClickListener(v -> {
+
             EventBus.getDefault().post(new ItemClickedEvent(dataItems.get(i), i));
             viewHolder.status.setBackground(new ColorDrawable(App.getAppContext().getResources().getColor(R.color.green)));
         });

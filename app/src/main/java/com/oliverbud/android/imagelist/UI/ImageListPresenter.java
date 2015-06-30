@@ -64,8 +64,6 @@ public class ImageListPresenter {
             @Override
             public void failure(RetrofitError error) {
                 Log.d("itemListApp", "displayError 2");
-
-                imageListView.displayError();
             }
         };
 
@@ -75,6 +73,7 @@ public class ImageListPresenter {
     }
 
     public void searchFor(String searchString) {
+        Log.d("itemListApp", "searchFor: " + searchString);
 
 
         page = 0;
@@ -97,8 +96,9 @@ public class ImageListPresenter {
 
             @Override
             public void failure(RetrofitError error) {
-                imageListView.displayError();
                 Log.d("itemListApp", "displayError 3");
+
+                imageListView.displayError();
 
             }
         };
