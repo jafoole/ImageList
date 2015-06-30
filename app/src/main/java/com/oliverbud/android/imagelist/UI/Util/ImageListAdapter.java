@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oliverbud.android.imagelist.Application.App;
-import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.R;
 import com.squareup.picasso.Picasso;
@@ -21,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import de.greenrobot.event.EventBus;
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by oliverbud on 5/26/15.
@@ -44,10 +41,6 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             name = (TextView)view.findViewById(R.id.textView);
             layout = (FrameLayout)view.findViewById(R.id.layout);
             status = (ImageView)view.findViewById(R.id.status);
-
-            image.setOnClickListener((View v) ->
-                EventBus.getDefault().post(new GenericEvent("SNACKS"))
-            );
 
         }
 

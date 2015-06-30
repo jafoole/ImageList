@@ -1,17 +1,13 @@
 package com.oliverbud.android.imagelist.UI.Util;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.oliverbud.android.imagelist.EventBus.GenericEvent;
 import com.oliverbud.android.imagelist.R;
-import com.oliverbud.android.imagelist.UI.Util.EndlessScrollListener;
 
 import de.greenrobot.event.EventBus;
 
@@ -45,29 +41,6 @@ public class SmartListView extends LinearLayout {
         this.addView(view);
 
 
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        bus.register(this);
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        bus.unregister(this);
-    }
-
-    public void onEvent(GenericEvent event) {
-        Log.d("itemListApp", "ListView ReceivedEvent");
-
-        if (event.event == "SNACKS") {
-
-            Snackbar
-                    .make((View)this.getParent(), "bullllllyyyyyyy", Snackbar.LENGTH_LONG)
-                    .show();
-        }
     }
 
     public LinearLayoutManager getLayoutManager(){
