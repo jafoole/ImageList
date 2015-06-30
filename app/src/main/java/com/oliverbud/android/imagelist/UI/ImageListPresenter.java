@@ -33,6 +33,7 @@ public class ImageListPresenter {
     public ArrayList<ImageDataItem> list;
 
     ImageIDKeeper idKeeper;
+    String currentSearchDisplay = null;
 
 
     @javax.inject.Inject
@@ -93,7 +94,7 @@ public class ImageListPresenter {
                         list.get(i).status = 3;
                     }
                 }
-
+                currentSearchDisplay = searchString;
                 imageListView.setItems(list);
                 page += 1;
             }
@@ -113,12 +114,16 @@ public class ImageListPresenter {
     }
 
     public void onEvent(SearchEvent event){
-        searchFor(event.search);
+        if (currentSearchDisplay == null || !currentSearchDisplay.equals(event.search)) {
+            searchFor(event.search);
+        }
 
     }
 
     public void onEvent(NavItemSelectedEvent event){
-        searchFor(event.item.toString());
+        if (currentSearchDisplay == null || !currentSearchDisplay.equals(event.item.toString())) {
+            searchFor(event.item.toString());
+        }
 
     }
 

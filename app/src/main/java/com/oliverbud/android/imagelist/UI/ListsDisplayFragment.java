@@ -48,8 +48,6 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     ImageListPresenter presenter;
 
 
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,6 +95,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
         if (savedInstanceState != null){
             presenter.list = savedInstanceState.getParcelableArrayList("list");
             presenter.page = savedInstanceState.getInt("page");
+            presenter.currentSearchDisplay = savedInstanceState.getString("currentSearchDisplay");
         }
 
 
@@ -108,6 +107,7 @@ public class ListsDisplayFragment extends Fragment implements ImageListView {
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("list", presenter.list);
         outState.putInt("page", presenter.page);
+        outState.putString("currentSearchDisplay", presenter.currentSearchDisplay);
         super.onSaveInstanceState(outState);
 
     }
