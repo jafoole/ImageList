@@ -2,6 +2,8 @@ package com.oliverbud.android.imagelist.UI;
 
 import android.util.Log;
 
+import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
+import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.removeSavedItem;
 
 import java.util.ArrayList;
@@ -39,6 +41,17 @@ public class NavigationPresenter {
     public void onEvent(removeSavedItem event){
         Log.d("itemListApp", "removeSavedItem");
         removeSavedItem(event.item);
+    }
+
+    public void onEvent(AddItemsEvent event) {
+
+        updateNavItems(event.addItems);
+    }
+
+    public void onEvent(ItemClickedEvent event) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add(event.getTitle());
+        updateSavedItems(list);
     }
 
     public void updateNavItems(ArrayList<String> navList){

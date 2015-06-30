@@ -59,7 +59,9 @@ public class NavigationFragment extends Fragment implements NavView {
 
         ButterKnife.inject(this, view);
 
-        history.setOnItemClickListener((parent, view1, position, id) ->  EventBus.getDefault().post(new NavItemSelectedEvent(navPresenter.navList.get(position))));
+        history.setOnItemClickListener((parent, view1, position, id) ->  {
+            EventBus.getDefault().post(new NavItemSelectedEvent(navPresenter.navList.get(position)));
+        });
 
 
 
@@ -110,18 +112,6 @@ public class NavigationFragment extends Fragment implements NavView {
     }
 
 
-    public void onEvent(AddItemsEvent event) {
-
-        navPresenter.updateNavItems(event.addItems);
-    }
-
-    public void onEvent(ItemClickedEvent event) {
-        ArrayList<String> list = new ArrayList<>();
-        list.add(event.getTitle());
-        navPresenter.updateSavedItems(list);
-    }
-
-
     @Override
     public void updateNavigationWithItems(ArrayList<String> items) {
         Log.d("itemListApp", "updateNavigationWithItems size: " + items.size());
@@ -137,7 +127,6 @@ public class NavigationFragment extends Fragment implements NavView {
     @Override
     public void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
         navPresenter.unregisterBus();
 
     }
@@ -145,7 +134,6 @@ public class NavigationFragment extends Fragment implements NavView {
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
         navPresenter.registerBus();
 
     }

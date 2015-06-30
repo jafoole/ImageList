@@ -3,6 +3,9 @@ package com.oliverbud.android.imagelist.UI;
 
 import android.util.Log;
 
+import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
+import com.oliverbud.android.imagelist.EventBus.SearchEvent;
+import com.oliverbud.android.imagelist.EventBus.UpdateListAtPosition;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -57,7 +61,7 @@ public class ImageListPresenter {
                             list.add(moreList.get(i));
                         }
                     }
-                    imageListView.addItems(moreList);
+                    imageListView.updateItems(-1);
                 }
             }
 
@@ -107,4 +111,27 @@ public class ImageListPresenter {
 
 
     }
+
+    public void onEvent(SearchEvent event){
+        searchFor(event.search);
+
+    }
+
+    public void onEvent(NavItemSelectedEvent event){
+        searchFor(event.item.toString());
+
+    }
+
+    public void onEvent(UpdateListAtPosition event){
+        imageListView.updateItems(event.position);
+    }
+
+    public void registerBus(){
+        EventBus.getDefault().register(this);
+    }
+
+    public void unregisterBus(){
+        EventBus.getDefault().unregister(this);
+    }
+
 }

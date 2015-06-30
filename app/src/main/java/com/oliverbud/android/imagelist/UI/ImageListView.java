@@ -13,7 +13,7 @@ public interface ImageListView {
 
     public void setItems(ArrayList<ImageDataItem> listData);
 
-    public void addItems(ArrayList<ImageDataItem> listData);
+    public void updateItems(int position);
 
 
     public void displayError();
