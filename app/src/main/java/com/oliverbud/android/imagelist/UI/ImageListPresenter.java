@@ -38,7 +38,6 @@ public class ImageListPresenter {
 
     @javax.inject.Inject
     public ImageListPresenter(ImageListView imageListView, NetworkManager networkManager, ImageIDKeeper idKeeper) {
-        Log.d("itemListApp", "instantiate Presenter");
         this.imageListView = imageListView;
         this.networkManager = networkManager;
         this.idKeeper = idKeeper;
@@ -72,20 +71,18 @@ public class ImageListPresenter {
             }
         };
 
-        Log.d("itemListApp", "page: " + page);
+
         page += 1;
         networkManager.search(moreString, 8, page * 8, null, "medium", callback);
     }
 
     public void searchFor(String searchString) {
-        Log.d("itemListApp", "searchFor: " + searchString);
 
 
         page = 0;
         Callback callback = new Callback() {
             @Override
             public void success(Object o, Response response) {
-                Log.d("itemListApp", "presenter callback, success");
 
                 list = (ArrayList<ImageDataItem>) o;
 
@@ -101,7 +98,6 @@ public class ImageListPresenter {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("itemListApp", "displayError 3");
 
                 imageListView.displayError();
 
