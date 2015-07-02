@@ -26,6 +26,10 @@ public class NetworkManager {
 
     final float version = 1.0f;
 
+    public NetworkManager(){
+
+    }
+
     @Inject
     public NetworkManager(ImageApi imageService, PingApi pingService){
         Log.d("itemListApp", "Create NetworkManager");

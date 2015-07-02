@@ -1,5 +1,6 @@
 package com.oliverbud.android.imagelist.UI;
 
+import com.oliverbud.android.imagelist.EventBus.SearchEvent;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
 import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
@@ -40,7 +41,7 @@ public class ImageListPresenterTest extends TestCase {
 
     ImageIDKeeper keeper = new ImageIDKeeper();
 
-    NetworkManager manager = Mockito.mock(NetworkManager.class);
+    NetworkManager manager = new MockNetworkManager(null, null);
 
     ImageListPresenter presenter = new ImageListPresenter(view, manager, keeper);
 
@@ -50,8 +51,16 @@ public class ImageListPresenterTest extends TestCase {
         presenter.loadMore("feet");
         presenter.loadMore("feet");
 
-        assertEquals(2, presenter.page);
+        assertEquals(3, presenter.page);
 
+    }
+
+    @Test
+    public void testBusSearch(){
+        SearchEvent event = new SearchEvent("tacos");
+        presenter.onEvent(event);
+
+        assertEquals("tacos", presenter.currentSearchDisplay);
     }
 
 }
