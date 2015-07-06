@@ -25,7 +25,6 @@ public class NavigationPresenter {
 
     @Inject
     public NavigationPresenter( NavView navigationView){
-        Log.d("itemListApp", "NavigationPresenterInstantiate");
         this.navigationView = navigationView;
 
     }
@@ -39,7 +38,6 @@ public class NavigationPresenter {
     }
 
     public void onEvent(removeSavedItem event){
-        Log.d("itemListApp", "removeSavedItem");
         removeSavedItem(event.item);
     }
 

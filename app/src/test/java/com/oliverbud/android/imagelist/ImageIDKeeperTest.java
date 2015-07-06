@@ -1,36 +1,43 @@
 package com.oliverbud.android.imagelist;
 
-import junit.framework.TestCase;
+import android.util.Log;
+
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import static org.junit.Assert.*;
+
 
 /**
  * Created by oliverbudiardjo on 7/2/15.
  */
-public class ImageIDKeeperTest extends TestCase {
+public class ImageIDKeeperTest{
 
-    private static ImageIDKeeper keeper = new ImageIDKeeper();
+    private ImageIDKeeper keeper;
+
+    @Before
+    public void setup(){
+        this.keeper = new ImageIDKeeper();
+        this.keeper.addToList("Hello");
+    }
 
     @Test
     public void testIDKeeperAddition(){
-        keeper.addToList("Hello");
-        assertEquals("add to list failed", "Hello", keeper.getImageIdList().get(0));
+        assertEquals("add to list failed", "Hello", this.keeper.getImageIdList().get(0));
     }
 
     @Test
     public void testIDKeeperContains(){
-        boolean contains = keeper.containedInList("beans");
+        boolean contains = this.keeper.containedInList("Hello");
         assertEquals("contains list failed", true, contains);
     }
 
     @Test
     public void testIDKeeperDeletion(){
-        keeper.removeFromList("Hello");
-        assertEquals("delete from list failed", 0, keeper.getImageIdList().size());
+
+        this.keeper.removeFromList("Hello");
+        assertEquals("delete from list failed", 0, this.keeper.getImageIdList().size());
     }
 
 }

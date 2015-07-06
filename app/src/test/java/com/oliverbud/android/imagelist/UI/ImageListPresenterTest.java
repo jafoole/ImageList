@@ -7,15 +7,16 @@ import com.oliverbud.android.imagelist.UI.Util.ImageDataItem;
 
 import junit.framework.TestCase;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
 /**
  * Created by oliverbudiardjo on 7/2/15.
  */
-public class ImageListPresenterTest extends TestCase {
+public class ImageListPresenterTest{
 
     ImageListView view = new ImageListView() {
         @Override
@@ -43,7 +44,12 @@ public class ImageListPresenterTest extends TestCase {
 
     NetworkManager manager = new MockNetworkManager(null, null);
 
-    ImageListPresenter presenter = new ImageListPresenter(view, manager, keeper);
+    ImageListPresenter presenter;
+
+    @Before
+    public void setup(){
+        presenter = new ImageListPresenter(view, manager, keeper);
+    }
 
     @Test
     public void testPresenter(){
@@ -57,6 +63,7 @@ public class ImageListPresenterTest extends TestCase {
 
     @Test
     public void testBusSearch(){
+
         SearchEvent event = new SearchEvent("tacos");
         presenter.onEvent(event);
 
