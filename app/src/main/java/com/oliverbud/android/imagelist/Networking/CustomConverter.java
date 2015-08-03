@@ -22,10 +22,10 @@ public class CustomConverter implements Converter {
     @Override
     public Object fromBody(TypedInput body, Type type) throws ConversionException {
         Log.d("ViceNewsConverter", "fromBody type: " + type.toString());
-        NetworkResponseData responseData = null;
+        NetworkResponseDataSub responseData = null;
         Gson gson = new Gson();
         try {
-            responseData = gson.fromJson(new BufferedReader(new InputStreamReader(body.in())), NetworkResponseData.class);
+            responseData = gson.fromJson(new BufferedReader(new InputStreamReader(body.in())), NetworkResponseDataSub.class);
         }
         catch (IOException e){
 

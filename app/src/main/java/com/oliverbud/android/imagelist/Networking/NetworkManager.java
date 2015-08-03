@@ -52,11 +52,13 @@ public class NetworkManager {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.d("itemListApp", "network onError: " + e.getMessage());
                         callback.failure(null);
                     }
 
                     @Override
                     public void onNext(NetworkResponseData networkResponseData) {
+                        Log.d("itemListApp", "network success: " + networkResponseData.getClass());
                         if(networkResponseData.getResponseData() != null){
                             callback.success(networkResponseData.getResponseData().getResults(), null);
                         }
