@@ -34,6 +34,7 @@ public class NetworkModule {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://ajax.googleapis.com")
                 .setClient(new OkClient(client))
+                .setConverter(new CustomConverter())
                 .build();
         return restAdapter.create(ImageApi.class);
     }
