@@ -10,8 +10,8 @@ import android.os.Parcelable;
 public class ImageDataItem implements Parcelable{
 
     public String url;
-    public Integer width;
-    public Integer height;
+    public int width;
+    public int height;
     public String imageId;
     public int color = -1;
 
