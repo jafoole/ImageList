@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +21,8 @@ import android.widget.LinearLayout;
 
 
 import com.oliverbud.android.imagelist.Application.App;
+import com.oliverbud.android.imagelist.Database.Image;
+import com.oliverbud.android.imagelist.Database.Image$Table;
 import com.oliverbud.android.imagelist.EventBus.AddItemsEvent;
 import com.oliverbud.android.imagelist.EventBus.ItemClickedEvent;
 import com.oliverbud.android.imagelist.EventBus.NavItemSelectedEvent;
@@ -28,9 +31,14 @@ import com.oliverbud.android.imagelist.EventBus.UpdateListAtPosition;
 import com.oliverbud.android.imagelist.EventBus.removeSavedItem;
 import com.oliverbud.android.imagelist.ImageIDKeeper;
 import com.oliverbud.android.imagelist.Networking.NetworkManager;
+import com.oliverbud.android.imagelist.Networking.NetworkResponseData;
+import com.oliverbud.android.imagelist.Networking.NetworkResponseData$Table;
 import com.oliverbud.android.imagelist.R;
+import com.raizlabs.android.dbflow.sql.builder.Condition;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 import javax.inject.Inject;
@@ -166,6 +174,39 @@ public class MainActivity extends AppCompatActivity{
         if (currentSearch != null){
             searchInput.setTitle(currentSearch);
         }
+
+        Image image1 = new Image();
+        image1.setName("robert");
+        image1.save();
+
+        Image image2 = new Image();
+        image2.setName("flaubert");
+        image2.save();
+
+        try {
+            List<Image> images11 = new Select().from(Image.class)
+                    .where(
+                            Condition.column(Image$Table.NAME).eq("robert"),
+                            Condition.column(Image$Table.FEET).eq(true)).queryList();
+            Log.d("DBFlow", "roberts: " + images11.size());
+
+            List<Image> images22 = new Select().from(Image.class)
+                    .where(
+                            Condition.column(Image$Table.NAME).eq("flaubert"),
+                            Condition.column(Image$Table.FEET).eq(true)).queryList();
+            Log.d("DBFlow", "flauberts: " + images22.size());
+
+            List<NetworkResponseData> images33 = new Select().from(NetworkResponseData.class)
+                    .where(
+                            Condition.column(NetworkResponseData$Table.FEET).eq(true)).queryList();
+            Log.d("DBFlow", "datas: " + images33.size());
+
+        }
+        catch(SQLiteException s){
+
+        }
+
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         // replace with the current version of the Android plugin
@@ -90,5 +91,9 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
 
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+
+    apt 'com.raizlabs.android:DBFlow-Compiler:2.2.1'
+    compile "com.raizlabs.android:DBFlow-Core:2.2.1"
+    compile "com.raizlabs.android:DBFlow:2.2.1"
 }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.oliverbud.android.imagelist.ImageIdKeeperModule;
 import com.oliverbud.android.imagelist.Networking.NetworkModule;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.util.Arrays;
@@ -29,6 +30,8 @@ public class App extends Application {
         objectGraph = ObjectGraph.create(getModules().toArray());
         objectGraph = objectGraph.plus(new NetworkModule());
         objectGraph.inject(this);
+
+        FlowManager.init(this);
     }
 
     private List<Object> getModules() {

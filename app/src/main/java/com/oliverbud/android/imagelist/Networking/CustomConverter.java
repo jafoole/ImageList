@@ -2,8 +2,11 @@ package com.oliverbud.android.imagelist.Networking;
 
 import android.util.Log;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.raizlabs.android.dbflow.structure.ModelAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,9 +32,19 @@ public class CustomConverter implements Converter {
     @Override
     public Object fromBody(TypedInput body, Type type) throws ConversionException {
         Log.d("ViceNewsConverter", "fromBody type: " + type.toString());
-        NetworkResponseDataSub responseData = null;
+        NetworkResponseData responseData = null;
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return f.getDeclaredClass().equals(ModelAdapter.class);
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).create();
         try {
             String responseJson = fromStream(body.in());
             Object json = new JSONTokener(responseJson).nextValue();
@@ -46,7 +59,8 @@ public class CustomConverter implements Converter {
             Log.d("ViceNewsConverter", "responseJson: " + responseJson);
 
 
-            responseData = gson.fromJson(responseJson, NetworkResponseDataSub.class);
+            responseData = gson.fromJson(responseJson, NetworkResponseData.class);
+            responseData.save();
         }
         catch (IOException e){
             Log.d("ViceNewsConverter", "IOException: " + e);
